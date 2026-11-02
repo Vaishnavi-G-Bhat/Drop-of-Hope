@@ -1,0 +1,151 @@
+.skip-link {
+  position: absolute;
+  z-index: 30;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.75rem 1rem;
+  transform: translateY(-160%);
+  border-radius: 10px;
+  background: var(--ink);
+  color: white;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.site-header {
+  position: sticky;
+  z-index: 10;
+  top: 0;
+  border-bottom: 1px solid var(--border);
+  background: rgb(255 249 249 / 95%);
+  backdrop-filter: blur(12px);
+}
+
+.site-nav {
+  display: flex;
+  max-width: 76rem;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-nav__links,
+.site-nav__controls,
+.text-size-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.site-nav__links {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0.45rem 0.65rem;
+  border-radius: 10px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+  background: var(--rose-tint);
+}
+
+.unread-count {
+  display: inline-grid;
+  min-width: 1.3rem;
+  min-height: 1.3rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--brand);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.page-content {
+  min-height: 60vh;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 3rem) 1rem;
+  animation: page-enter 240ms ease-out both;
+}
+
+.site-footer {
+  display: flex;
+  min-height: 96px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  color: var(--slate);
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.unread-count[hidden] {
+  display: none;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .site-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .site-nav__links {
+    order: 3;
+    width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .site-nav__controls {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .site-nav__links {
+    gap: 0;
+  }
+
+  .nav-link {
+    padding-inline: 0.45rem;
+    font-size: 0.9rem;
+  }
+}

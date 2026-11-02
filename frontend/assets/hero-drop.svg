@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title">
+  <title id="title">A drop of hope</title>
+  <circle cx="160" cy="170" r="115" fill="#FBEDEE"/>
+  <circle cx="160" cy="170" r="92" fill="none" stroke="#F4A3AE" stroke-width="3" opacity=".7"/>
+  <path fill="#C8102E" d="M160 35c-22 39-66 84-66 126a66 66 0 0 0 132 0c0-42-44-87-66-126Z"/>
+  <path fill="#fff" d="M127 162c0 19 15 34 34 34" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="9"/>
+  <path fill="#F4A3AE" d="m197 91 5 12 12 5-12 5-5 12-5-12-12-5 12-5 5-12Z"/>
+  <circle cx="247" cy="91" r="6" fill="#E8590C"/>
+  <circle cx="75" cy="115" r="5" fill="#2E7D5B"/>
+</svg>

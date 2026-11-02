@@ -1,0 +1,95 @@
+:root {
+  color-scheme: light;
+  --brand: #c8102e;
+  --brand-deep: #8b0f1f;
+  --ink: #1f1417;
+  --rose-tint: #fbedee;
+  --blush: #f4a3ae;
+  --urgent: #e8590c;
+  --success: #2e7d5b;
+  --amber: #8a5700;
+  --amber-bg: #fff4d6;
+  --slate: #5b6470;
+  --surface: #fff;
+  --page: #fff9f9;
+  --border: #eadbdd;
+  --shadow-card: 0 12px 32px rgb(87 27 39 / 8%);
+  --radius-card: 18px;
+  --font-body: 'Inter', 'Noto Sans Kannada', sans-serif;
+  --font-heading: 'Poppins', 'Noto Sans Kannada', sans-serif;
+  --text-scale: 1;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  font-size: calc(100% * var(--text-scale));
+}
+
+:lang(kn) {
+  font-family: 'Noto Sans Kannada', var(--font-body);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3.75rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+a {
+  color: var(--brand-deep);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid #1c6a9c;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

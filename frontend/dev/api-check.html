@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>API check | Drop of Hope</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+Kannada:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <style>
+      .check-form { display: grid; max-width: 36rem; gap: 1rem; margin-bottom: 2rem; }
+      .check-form label { display: grid; gap: 0.35rem; font-weight: 600; }
+      .check-form input, .check-form select { min-height: 44px; padding: 0.6rem; border: 1px solid var(--border); border-radius: 10px; }
+      .check-results { width: 100%; border-collapse: collapse; }
+      .check-results th, .check-results td { padding: 0.75rem; border-bottom: 1px solid var(--border); text-align: left; }
+      .check-pass { color: var(--success); font-weight: 700; }
+      .check-fail { color: #9e1630; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Backend API check</h1>
+      <p>Run the backend on port 5000, enter a seeded or registered account, and test the public and role-specific read endpoints.</p>
+      <form class="check-form" id="check-form">
+        <label>Role
+          <select name="role" required>
+            <option value="guest">Guest (no login)</option>
+            <option value="donor">Donor</option>
+            <option value="patient">Patient</option>
+            <option value="blood_bank">Blood bank</option>
+            <option value="admin">Admin</option>
+          </select>
+        </label>
+        <label>Email <input name="email" type="email" autocomplete="username"></label>
+        <label>Password <input name="password" type="password" autocomplete="current-password"></label>
+        <button class="button button--primary" type="submit">Run API checks</button>
+      </form>
+      <p id="check-summary" aria-live="polite"></p>
+      <table class="check-results" aria-label="API check results">
+        <thead><tr><th>Endpoint</th><th>Result</th><th>Details</th></tr></thead>
+        <tbody id="check-results"></tbody>
+      </table>
+    </main>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="./api-check.js"></script>
+  </body>
+</html>
