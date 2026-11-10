@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Create an account | Drop of Hope</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/pages.css">
+  </head>
+  <body>
+    <main class="auth-shell" data-page="register">
+      <section class="card auth-card" aria-labelledby="register-title">
+        <span class="eyebrow">Join the community</span>
+        <h1 id="register-title">Create your account</h1>
+        <p class="muted">Choose the account type that matches how you will use the portal. Admin accounts are created by the backend administrator, not through public registration.</p>
+        <form id="register-form">
+          <div class="stack">
+            <label class="form-field" for="role">I am registering as
+              <select id="role" name="role" required>
+                <option value="donor">Blood donor</option>
+                <option value="patient">Blood requester / patient</option>
+                <option value="blood_bank">Blood bank</option>
+              </select>
+            </label>
+            <div class="form-grid">
+              <label class="form-field" for="full_name">Full name
+                <input id="full_name" name="full_name" autocomplete="name" maxlength="255" required>
+              </label>
+              <label class="form-field" for="email">Email address
+                <input id="email" name="email" type="email" autocomplete="email" maxlength="255" required>
+              </label>
+              <label class="form-field" for="phone">Phone number
+                <input id="phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" autocomplete="tel" aria-describedby="phone-hint" required>
+                <span id="phone-hint" class="form-hint">Enter 10 digits.</span>
+              </label>
+              <label class="form-field" for="password">Password
+                <input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required>
+              </label>
+            </div>
+            <label><input id="show-password" type="checkbox"> Show password</label>
+
+            <fieldset id="donor-fields" class="form-grid">
+              <legend class="form-field--wide">Donor details</legend>
+              <label class="form-field" for="age">Age
+                <input id="age" name="age" type="number" min="18" max="65" step="1" required>
+              </label>
+              <label class="form-field" for="blood_group">Blood group
+                <select id="blood_group" name="blood_group" required>
+                  <option value="">Select a blood group</option>
+                  <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                  <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+                </select>
+              </label>
+              <label class="form-field" for="donor-city">City
+                <input id="donor-city" name="city" maxlength="120" required>
+              </label>
+              <label class="form-field" for="donor-area">Area (optional)
+                <input id="donor-area" name="area" maxlength="120">
+              </label>
+              <label class="form-field" for="donor-pin">PIN code
+                <input id="donor-pin" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required>
+              </label>
+            </fieldset>
+
+            <fieldset id="patient-fields" class="form-grid" hidden>
+              <legend class="form-field--wide">Requester details</legend>
+              <label class="form-field" for="patient-city">City
+                <input id="patient-city" name="city" maxlength="120" required>
+              </label>
+              <label class="form-field" for="patient-area">Area (optional)
+                <input id="patient-area" name="area" maxlength="120">
+              </label>
+              <label class="form-field" for="patient-pin">PIN code (optional)
+                <input id="patient-pin" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6">
+              </label>
+            </fieldset>
+
+            <fieldset id="bank-fields" class="form-grid" hidden>
+              <legend class="form-field--wide">Blood bank details</legend>
+              <label class="form-field" for="bank-name">Blood bank name
+                <input id="bank-name" name="name" maxlength="255" required>
+              </label>
+              <label class="form-field" for="license-number">License number (optional)
+                <input id="license-number" name="license_number" maxlength="120">
+              </label>
+              <label class="form-field" for="bank-city">City
+                <input id="bank-city" name="city" maxlength="120" required>
+              </label>
+              <label class="form-field" for="bank-area">Area (optional)
+                <input id="bank-area" name="area" maxlength="120">
+              </label>
+              <label class="form-field" for="bank-pin">PIN code
+                <input id="bank-pin" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required>
+              </label>
+              <label class="form-field" for="bank-contact">Public contact phone (optional)
+                <input id="bank-contact" name="contact_phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10">
+              </label>
+              <label class="form-field" for="bank-address">Address (optional)
+                <input id="bank-address" name="address" maxlength="255">
+              </label>
+              <label class="form-field" for="open-hours">Opening hours (optional)
+                <input id="open-hours" name="open_hours" maxlength="255">
+              </label>
+            </fieldset>
+            <button class="button button--primary" type="submit">Create account</button>
+            <p id="form-message" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+        <p class="muted">Already registered? <a href="./login.html">Log in</a>.</p>
+      </section>
+    </main>
+    <script type="module" src="./js/layout.js"></script>
+    <script type="module" src="./js/register.js"></script>
+  </body>
+</html>

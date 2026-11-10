@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <meta name="description" content="Find blood donors and verified blood banks, or register to help someone in need.">
+    <title>Drop of Hope | Blood donation and emergency availability</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/pages.css">
+  </head>
+  <body>
+    <main data-page="home">
+      <section class="hero" aria-labelledby="hero-title">
+        <div>
+          <span class="eyebrow">Together, in the moments that matter</span>
+          <h1 id="hero-title">A little hope can go a long way.</h1>
+          <p>Connect with registered blood donors and verified blood banks. Find the next step when someone needs blood, or be ready to give when you can.</p>
+          <p class="hero-login">Already have an account? <a href="./login.html">Log in</a></p>
+          <div class="hero-actions">
+            <a class="button button--primary" href="./register.html?role=donor">Become a donor</a>
+            <a class="button button--secondary" href="./register.html?role=patient">Request blood</a>
+          </div>
+          <p class="form-hint">Information helps you connect; medical eligibility and availability must always be confirmed with a healthcare professional or blood bank.</p>
+        </div>
+        <img class="hero__art" src="./assets/hero-drop.svg" alt="" width="320" height="320">
+      </section>
+
+      <section class="content-section" aria-labelledby="how-title">
+        <span class="eyebrow">How it works</span>
+        <h2 id="how-title">A clear path to help</h2>
+        <div class="data-grid">
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">01</span>
+            <h3>Share what is needed</h3>
+            <p>Requesters can post a blood group, location, number of units and urgency.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">02</span>
+            <h3>Find local availability</h3>
+            <p>Search verified donors and blood banks using their reported information.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">03</span>
+            <h3>Confirm directly</h3>
+            <p>Contact the listed service or donor and confirm current availability before travelling.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="awareness-title">
+        <div class="split-layout">
+          <div>
+            <span class="eyebrow">Give with care</span>
+            <h2 id="awareness-title">A donation is a thoughtful act of care.</h2>
+            <p>Register your interest, keep your availability current, and follow guidance from qualified medical staff. Donation eligibility and timing vary by person and must be assessed by a healthcare professional.</p>
+          </div>
+          <aside class="notice notice--warning">
+            <strong>Important</strong>
+            <p>Drop of Hope is a connection portal, not a medical service. Search results and stock information may change; verify them directly with the donor or blood bank.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="groups-title">
+        <span class="eyebrow">Live availability</span>
+        <h2 id="groups-title">Blood groups reported by verified blood banks</h2>
+        <p>Live totals are loaded from the backend. A missing result means no verified stock record was returned, not that a group is medically compatible.</p>
+        <div id="blood-group-availability" class="blood-group-grid" aria-live="polite" aria-busy="true">
+          <div class="skeleton" aria-hidden="true"></div>
+          <div class="skeleton" aria-hidden="true"></div>
+          <div class="skeleton" aria-hidden="true"></div>
+          <div class="skeleton" aria-hidden="true"></div>
+        </div>
+        <p id="availability-message" class="form-hint" role="status"></p>
+        <div class="hero-actions">
+          <a class="button button--secondary" href="./search.html">Search live availability</a>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="emergency-title">
+        <div class="card feature-card">
+          <div class="split-layout">
+            <div>
+              <span class="eyebrow">Need help now?</span>
+              <h2 id="emergency-title">Start with a local search.</h2>
+              <p>Search current donor and blood-bank listings by blood group and location, then confirm details directly.</p>
+            </div>
+            <div class="hero-actions">
+              <a class="button button--primary" href="./search.html">Find blood availability</a>
+              <a class="button button--secondary" href="./register.html?role=patient">Create a request</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="contact-title">
+        <h2 id="contact-title">Questions or need help using the portal?</h2>
+        <p>For medical advice or urgent care, contact your healthcare provider or local emergency services. For account access, sign in and use the portal's available request and notification tools.</p>
+      </section>
+    </main>
+    <script type="module" src="./js/layout.js"></script>
+    <script type="module" src="./js/home.js"></script>
+  </body>
+</html>

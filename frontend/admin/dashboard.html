@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Admin dashboard | Drop of Hope</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+  </head>
+  <body>
+    <main data-dashboard="admin">
+      <header class="dashboard-header">
+        <div><span class="eyebrow">Administration</span><h1>Portal overview</h1><p>Review system information and manage existing users, requests and reports.</p></div>
+      </header>
+      <p id="dashboard-message" role="status" aria-live="polite"></p>
+      <section class="dashboard-section" aria-labelledby="overview-heading">
+        <h2 id="overview-heading">Overview</h2>
+        <div id="admin-stats" class="data-grid" aria-live="polite" aria-busy="true"></div>
+      </section>
+      <section class="card dashboard-section" aria-labelledby="users-heading">
+        <div class="section-heading"><div><h2 id="users-heading">Manage users</h2><p class="muted">Verification and account activation controls use the admin API.</p></div></div>
+        <form id="user-filter-form" class="form-actions">
+          <label class="form-field" for="filter-role">Role
+            <select id="filter-role" name="role"><option value="">All roles</option><option>donor</option><option>patient</option><option>blood_bank</option><option>admin</option></select>
+          </label>
+          <label class="form-field" for="filter-query">Name contains<input id="filter-query" name="q" maxlength="120"></label>
+          <label class="form-field" for="filter-verified">Verification
+            <select id="filter-verified" name="is_verified"><option value="">All</option><option value="true">Verified</option><option value="false">Pending</option></select>
+          </label>
+          <button class="button button--secondary" type="submit">Filter users</button>
+        </form>
+        <div id="admin-users" class="table-wrap" aria-live="polite" aria-busy="true"></div>
+      </section>
+      <section class="card dashboard-section" aria-labelledby="admin-requests-heading">
+        <div class="section-heading"><div><h2 id="admin-requests-heading">Monitor blood requests</h2></div>
+          <label class="form-field" for="request-status-filter">Status
+            <select id="request-status-filter"><option value="">All statuses</option><option>Pending</option><option>Response received</option><option>Resolved</option><option>Cancelled</option></select>
+          </label>
+        </div>
+        <div id="admin-requests" class="table-wrap" aria-live="polite" aria-busy="true"></div>
+      </section>
+      <section class="card dashboard-section" aria-labelledby="reports-heading">
+        <div class="section-heading"><div><h2 id="reports-heading">Review reports</h2></div>
+          <label class="form-field" for="report-status-filter">Report status
+            <select id="report-status-filter"><option value="">All statuses</option><option>Open</option><option>Resolved</option><option>Dismissed</option></select>
+          </label>
+        </div>
+        <div id="admin-reports" class="table-wrap" aria-live="polite" aria-busy="true"></div>
+      </section>
+    </main>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/admin-dashboard.js"></script>
+  </body>
+</html>

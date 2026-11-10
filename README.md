@@ -17,14 +17,20 @@ The platform supports donor matching, emergency requests, donor verification, an
 
 ```text
 frontend/
-  assets/       logo.svg, favicon.svg, hero-drop.svg
-  css/          theme.css, components.css, pages.css
-  dev/          api-check.html, api-check.js
-  js/           api.js, auth.js, config.js, enums.js,
-                i18n.js, layout.js, ui.js, utils.js
+  assets/       brand SVG assets
+  admin/        administrator dashboard
+  bloodbank/    blood-bank dashboard
+  donor/        donor dashboard
+  patient/      requester dashboard
+  css/          shared theme, components, and page styles
+  dev/          API check page
+  js/           shared API/auth/UI plus home, search, auth,
+                notification, and dashboard modules
+  index.html    public home page
+  login.html, register.html, search.html, notifications.html
 ```
 
-The current frontend contains shared UI and API foundations plus a backend API-check page. The home, search, login, registration, and role-specific application pages have not been implemented yet.
+The frontend includes the public home and search pages, login and registration forms, notifications, and role-protected donor, requester, blood-bank, and administrator dashboards. It uses the shared API client and session-cookie authentication; there is no JavaScript build step.
 
 ## Run locally
 
@@ -51,7 +57,7 @@ cd "D:\projects\Drop Of Hope\frontend"
 python -m http.server 5500
 ```
 
-The home page has not been added yet. For now, open the API check page at `http://127.0.0.1:5500/dev/api-check.html`.
+Open the site at `http://127.0.0.1:5500/`. The backend administrator created by `python seed.py` is `admin@truedrop.local` / `Admin@123`. Register donor, requester, or blood-bank accounts through the site; donor and blood-bank accounts require administrator verification before they appear in public search.
 
 ### macOS / Linux
 
@@ -74,7 +80,7 @@ cd "Drop Of Hope/frontend"
 python3 -m http.server 5500
 ```
 
-The home page has not been added yet. For now, open the API check page at `http://127.0.0.1:5500/dev/api-check.html`.
+Open the site at `http://127.0.0.1:5500/`.
 
 The frontend uses browser ES modules, so serve it over HTTP rather than opening an HTML file with `file://`. A VS Code Live Server extension can also serve the `frontend/` folder.
 
@@ -99,7 +105,9 @@ The current foundation includes:
 - Crimson/rose design tokens, responsive shared layout styles, and hand-made SVG brand assets.
 - `dev/api-check.html` for checking public search endpoints and role-specific read endpoints against a running backend.
 
-The frontend is in progress; the API check page can exercise the API, but the end-user pages and complete workflows are not yet available.
+The end-user pages use the existing Flask APIs. The donor dashboard edits donor profile and availability, shows matching requests, and records responses. The requester dashboard creates and tracks requests, updates their status, confirms donations, and searches availability. The blood-bank dashboard edits its profile and inventory and reads incoming requests. The admin dashboard displays available statistics and supports user verification/activation and report status management. The API check page remains available at `/dev/api-check.html`.
+
+The backend has no blood-bank action to update request status, no API to edit a blood bank's address/license after registration, no public admin registration, no Google OAuth login, and no search endpoint returning a single all-groups stock summary. The interface does not simulate these missing operations.
 
 ## Database
 
@@ -120,7 +128,7 @@ These are kept aligned with the backend models and are useful for local developm
 
 - The backend seed script currently prints only the admin demo account: `admin@truedrop.local` / `Admin@123`. Create other roles through the registration endpoints or the API check workflow.
 - The backend API contract is documented in `backend/API_CONTRACT.md`.
-- During local integration testing, populated donor and blood-bank searches returned server errors. The search routes currently reference `session` without importing it; this backend issue must be corrected before those results can be used reliably.
+- Populated donor search also failed when SQLite returned timezone-naive timestamps that the UTC freshness calculation could not subtract. Both the missing `session` import and timestamp normalization are fixed; the regression test exercises populated donor, blood-bank, and emergency searches.
 
 ## Running tests
 

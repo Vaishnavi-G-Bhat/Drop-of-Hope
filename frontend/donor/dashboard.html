@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Donor dashboard | Drop of Hope</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+  </head>
+  <body>
+    <main data-dashboard="donor">
+      <header class="dashboard-header">
+        <div><span class="eyebrow">Donor workspace</span><h1>Welcome, <span data-user-name>donor</span></h1><p>Keep your profile and availability up to date.</p></div>
+        <span id="verification-status" class="status-badge">Loading verification…</span>
+      </header>
+      <p id="dashboard-message" role="status" aria-live="polite"></p>
+      <section class="card dashboard-section" aria-labelledby="availability-heading">
+        <div class="section-heading"><div><h2 id="availability-heading">Your availability</h2><p class="muted">Current status: <strong id="current-availability">Loading…</strong></p></div></div>
+        <form id="availability-form" class="form-actions">
+          <label class="form-field" for="availability_status">Availability status
+            <select id="availability_status" name="availability_status" required>
+              <option>Available</option><option>Contact me first</option><option>Unavailable</option>
+            </select>
+          </label>
+          <button class="button button--primary" type="submit">Update availability</button>
+          <button id="confirm-availability" class="button button--secondary" type="button">Confirm current status</button>
+        </form>
+      </section>
+      <section class="card dashboard-section" aria-labelledby="profile-heading">
+        <h2 id="profile-heading">Donor profile</h2>
+        <form id="donor-profile-form" class="form-grid">
+          <label class="form-field" for="age">Age<input id="age" name="age" type="number" min="18" max="65" required></label>
+          <label class="form-field" for="blood_group">Blood group<input id="blood_group" name="blood_group" readonly aria-readonly="true"></label>
+          <label class="form-field" for="phone">Phone number<input id="phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required></label>
+          <label class="form-field" for="city">City<input id="city" name="city" maxlength="120" required></label>
+          <label class="form-field" for="area">Area<input id="area" name="area" maxlength="120"></label>
+          <label class="form-field" for="pin_code">PIN code<input id="pin_code" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required></label>
+          <label class="form-field" for="last_donation_date">Last donation date (optional)<input id="last_donation_date" name="last_donation_date" type="date"></label>
+          <div class="form-actions form-field--wide"><button class="button button--primary" type="submit">Save profile</button></div>
+        </form>
+        <p id="donor-summary" class="muted"></p>
+      </section>
+      <section class="dashboard-section" aria-labelledby="requests-heading">
+        <div class="section-heading"><div><h2 id="requests-heading">Relevant blood requests</h2><p class="muted">Open requests matching your blood group, as returned by the backend.</p></div></div>
+        <div id="donor-requests" class="data-grid" aria-live="polite" aria-busy="true"></div>
+      </section>
+      <section class="dashboard-section" aria-labelledby="history-heading">
+        <h2 id="history-heading">Donation response history</h2>
+        <div id="donor-history" class="stack"></div>
+      </section>
+    </main>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/donor-dashboard.js"></script>
+  </body>
+</html>

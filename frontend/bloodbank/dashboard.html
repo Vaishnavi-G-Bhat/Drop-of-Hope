@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Blood bank dashboard | Drop of Hope</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+  </head>
+  <body>
+    <main data-dashboard="blood_bank">
+      <header class="dashboard-header">
+        <div><span class="eyebrow">Blood bank workspace</span><h1><span data-bank-name>Blood bank</span></h1><p>Update your profile and reported stock.</p></div>
+        <span id="verification-status" class="status-badge">Loading verification…</span>
+      </header>
+      <p id="dashboard-message" role="status" aria-live="polite"></p>
+      <section class="card dashboard-section" aria-labelledby="bank-profile-heading">
+        <h2 id="bank-profile-heading">Blood bank profile</h2>
+        <form id="bank-profile-form" class="form-grid">
+          <label class="form-field" for="name">Bank name<input id="name" name="name" maxlength="255" required></label>
+          <label class="form-field" for="phone">Account phone<input id="phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required></label>
+          <label class="form-field" for="city">City<input id="city" name="city" maxlength="120" required></label>
+          <label class="form-field" for="area">Area<input id="area" name="area" maxlength="120"></label>
+          <label class="form-field" for="pin_code">PIN code<input id="pin_code" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required></label>
+          <label class="form-field" for="contact_phone">Contact phone<input id="contact_phone" name="contact_phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10"></label>
+          <label class="form-field" for="open_hours">Opening hours<input id="open_hours" name="open_hours" maxlength="255"></label>
+          <label class="form-field" for="address">Address (read-only)<input id="address" name="address" maxlength="255" readonly aria-readonly="true"></label>
+          <label class="form-field" for="license_number">License number<input id="license_number" name="license_number" maxlength="120" readonly aria-readonly="true"></label>
+          <div class="form-actions form-field--wide"><button class="button button--primary" type="submit">Save profile</button></div>
+        </form>
+        <p class="form-hint">The backend does not currently support editing the registered address or license number.</p>
+      </section>
+      <section class="card dashboard-section" aria-labelledby="inventory-heading">
+        <div class="section-heading"><div><h2 id="inventory-heading">Blood group inventory</h2><p class="muted">Update units using the backend stock API. Reported stock should be confirmed regularly.</p></div></div>
+        <form id="inventory-form">
+          <div id="inventory-fields" class="data-grid" aria-live="polite" aria-busy="true"></div>
+          <div class="form-actions inventory-actions">
+            <button class="button button--primary" type="submit">Save inventory</button>
+            <button id="confirm-stock" class="button button--secondary" type="button">Confirm current stock</button>
+          </div>
+        </form>
+      </section>
+      <section class="dashboard-section" aria-labelledby="incoming-heading">
+        <h2 id="incoming-heading">Incoming requests in your city</h2>
+        <p class="notice notice--warning">The backend provides a read-only blood-bank requests endpoint. It does not provide a blood-bank action to update request status.</p>
+        <div id="incoming-requests" class="data-grid" aria-live="polite" aria-busy="true"></div>
+      </section>
+    </main>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/bloodbank-dashboard.js"></script>
+  </body>
+</html>

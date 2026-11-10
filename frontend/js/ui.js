@@ -102,7 +102,7 @@ function renderNoAccess(role) {
   section.append(makeElement('h1', '', t('noAccessTitle')));
   section.append(makeElement('p', '', t('noAccessBody')));
   const link = makeElement('a', 'button button--primary', t('goToDashboard'));
-  link.href = dashboardPath(role);
+  link.href = appUrl(dashboardPath(role));
   section.append(link);
   main.append(section);
 }

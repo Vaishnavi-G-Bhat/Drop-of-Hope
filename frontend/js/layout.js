@@ -36,20 +36,30 @@ function buildNavbar() {
   brand.append(logo, element('span', '', APP_NAME));
 
   const links = element('div', 'site-nav__links');
-  links.append(
-    link('index.html', 'home'),
-    link('search.html', 'search'),
-    link('login.html', 'login'),
-    link('register.html', 'register'),
-    link('notifications.html', 'notifications'),
-  );
+  const homeLink = link('index.html', 'home');
+  const searchLink = link('search.html', 'search');
+  const loginLink = link('login.html', 'login');
+  loginLink.classList.add('nav-link--cta');
+  const registerLink = link('register.html', 'register');
+  loginLink.dataset.guestLink = '';
+  registerLink.dataset.guestLink = '';
+  const dashboardLink = link('login.html', 'goToDashboard');
+  dashboardLink.dataset.userDashboard = '';
+  dashboardLink.hidden = true;
+  const notificationsLink = link('notifications.html', 'notifications');
+  links.append(homeLink, searchLink, loginLink, registerLink, dashboardLink, notificationsLink);
 
   const unread = element('span', 'unread-count', '0');
   unread.dataset.unreadCount = '';
   unread.hidden = true;
   unread.setAttribute('aria-label', t('notifications'));
-  const notificationLink = links.querySelector('a[href="notifications.html"]');
-  notificationLink?.append(' ', unread);
+  notificationsLink.append(' ', unread);
+
+  const logout = element('button', 'text-button', 'Log out');
+  logout.type = 'button';
+  logout.dataset.logout = '';
+  logout.hidden = true;
+  links.append(logout);
 
   const controls = element('div', 'site-nav__controls');
   const language = document.createElement('button');

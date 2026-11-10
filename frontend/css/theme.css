@@ -15,6 +15,7 @@
   --border: #eadbdd;
   --shadow-card: 0 12px 32px rgb(87 27 39 / 8%);
   --radius-card: 18px;
+  --radius-control: 12px;
   --font-body: 'Inter', 'Noto Sans Kannada', sans-serif;
   --font-heading: 'Poppins', 'Noto Sans Kannada', sans-serif;
   --text-scale: 1;
@@ -64,6 +65,10 @@ h2 {
 
 a {
   color: var(--brand-deep);
+}
+
+img {
+  max-width: 100%;
 }
 
 button,

@@ -72,3 +72,52 @@ def test_blood_bank_stock_update(client):
     resp = client.put('/api/blood-bank/stock', json={'stock': [{'blood_group': 'A+', 'units': 10}]})
     assert resp.status_code == 200
     assert resp.get_json()['success'] is True
+
+
+def test_public_search_with_verified_donor_and_blood_bank(client):
+    from app.models import BloodStock, User
+
+    client.post('/api/auth/register/donor', json={
+        'email': 'search-donor@example.com',
+        'password': 'Password1',
+        'full_name': 'Search Donor',
+        'phone': '9876543210',
+        'age': 26,
+        'blood_group': 'O+',
+        'city': 'Bengaluru',
+        'pin_code': '560001',
+    })
+    client.post('/api/auth/register/blood-bank', json={
+        'email': 'search-bank@example.com',
+        'password': 'Password1',
+        'full_name': 'Bank Contact',
+        'phone': '9876543211',
+        'name': 'Search Blood Bank',
+        'city': 'Bengaluru',
+        'pin_code': '560001',
+        'contact_phone': '9876543211',
+    })
+
+    donor_user = User.query.filter_by(email='search-donor@example.com').one()
+    bank_user = User.query.filter_by(email='search-bank@example.com').one()
+    donor_user.is_verified = True
+    bank_user.is_verified = True
+    db.session.add(BloodStock(
+        blood_bank_id=bank_user.blood_bank.id,
+        blood_group='O+',
+        units=4,
+    ))
+    db.session.commit()
+
+    donor_search = client.get('/api/search/donors?blood_group=O%2B')
+    bank_search = client.get('/api/search/blood-banks?blood_group=O%2B')
+    emergency_search = client.get('/api/search/emergency?blood_group=O%2B')
+
+    assert donor_search.status_code == 200
+    assert donor_search.get_json()['data']['items'][0]['blood_group'] == 'O+'
+    assert donor_search.get_json()['data']['items'][0]['masked_phone'] is None
+    assert bank_search.status_code == 200
+    assert bank_search.get_json()['data']['items'][0]['units_reported'] == 4
+    assert emergency_search.status_code == 200
+    assert emergency_search.get_json()['data']['donors']['total'] == 1
+    assert emergency_search.get_json()['data']['blood_banks']['total'] == 1

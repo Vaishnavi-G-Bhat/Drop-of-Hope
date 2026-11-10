@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Log in | Drop of Hope</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/pages.css">
+  </head>
+  <body>
+    <main class="auth-shell" data-page="login">
+      <section class="card auth-card" aria-labelledby="login-title">
+        <span class="eyebrow">Welcome back</span>
+        <h1 id="login-title">Log in to Drop of Hope</h1>
+        <p class="muted">Use your registered email and password.</p>
+        <button class="button button--google" type="button" disabled aria-describedby="google-login-note">
+          <span class="google-mark" aria-hidden="true">G</span>
+          Continue with Google
+          <span class="coming-soon">Coming soon</span>
+        </button>
+        <p id="google-login-note" class="form-hint">Google sign-in is not connected yet. The current backend supports email and password login only.</p>
+        <div class="auth-divider" aria-hidden="true"><span>or sign in with email</span></div>
+        <form id="login-form" data-login-form novalidate>
+          <div class="stack">
+            <label class="form-field" for="email">Email address
+              <input id="email" name="email" type="email" autocomplete="username" maxlength="255" required>
+            </label>
+            <label class="form-field" for="password">Password
+              <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+            </label>
+            <label><input id="show-password" type="checkbox"> Show password</label>
+            <button class="button button--primary" type="submit">Log in</button>
+            <p id="form-message" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+        <p class="muted">New to Drop of Hope? <a href="./register.html">Create an account</a>.</p>
+      </section>
+    </main>
+    <script type="module" src="./js/layout.js"></script>
+    <script type="module" src="./js/login.js"></script>
+  </body>
+</html>

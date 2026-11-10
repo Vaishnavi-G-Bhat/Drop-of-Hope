@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Find blood | Drop of Hope</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/pages.css">
+  </head>
+  <body>
+    <main data-page="search">
+      <div class="page-intro">
+        <span class="eyebrow">Search live listings</span>
+        <h1>Find donors and blood banks</h1>
+        <p>Filter real listings from the backend by blood group and location. Availability and inventory are reported values; confirm directly before making plans.</p>
+      </div>
+      <section class="card dashboard-section" aria-labelledby="search-title">
+        <h2 id="search-title">Search by need and location</h2>
+        <form id="search-form" class="form-grid">
+          <label class="form-field" for="blood_group">Blood group
+            <select id="blood_group" name="blood_group">
+              <option value="">Any blood group</option>
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select>
+          </label>
+          <label class="form-field" for="city">City
+            <input id="city" name="city" maxlength="120">
+          </label>
+          <label class="form-field" for="area">Area
+            <input id="area" name="area" maxlength="120">
+          </label>
+          <label class="form-field" for="pin_code">PIN code
+            <input id="pin_code" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6">
+          </label>
+          <label class="form-field form-field--wide"><span><input type="checkbox" name="compatible" value="true"> Include compatible donor blood groups</span></label>
+          <div class="form-actions form-field--wide">
+            <button class="button button--primary" type="submit">Search availability</button>
+            <button class="button button--secondary" type="reset">Clear filters</button>
+          </div>
+        </form>
+      </section>
+      <p id="search-message" role="status" aria-live="polite"></p>
+      <div class="split-layout">
+        <section class="dashboard-section" aria-labelledby="donor-results-title">
+          <h2 id="donor-results-title">Potential donors</h2>
+          <div id="donor-results" class="data-grid"></div>
+        </section>
+        <section class="dashboard-section" aria-labelledby="bank-results-title">
+          <h2 id="bank-results-title">Blood banks</h2>
+          <div id="bank-results" class="data-grid"></div>
+        </section>
+      </div>
+      <p class="notice notice--warning">Search results are not a guarantee of availability or medical compatibility. Confirm stock and eligibility with the blood bank or healthcare professional.</p>
+    </main>
+    <script type="module" src="./js/layout.js"></script>
+    <script type="module" src="./js/search.js"></script>
+  </body>
+</html>

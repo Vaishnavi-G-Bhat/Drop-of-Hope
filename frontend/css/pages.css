@@ -58,6 +58,10 @@
   justify-content: center;
 }
 
+.site-nav__links [hidden] {
+  display: none;
+}
+
 .nav-link {
   display: inline-flex;
   min-height: 44px;
@@ -71,6 +75,19 @@
 .nav-link:hover,
 .nav-link:focus-visible {
   background: var(--rose-tint);
+}
+
+.nav-link--cta {
+  border: 1px solid var(--brand);
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+}
+
+.nav-link--cta:hover,
+.nav-link--cta:focus-visible {
+  background: var(--brand-deep);
+  color: #fff;
 }
 
 .unread-count {
@@ -107,6 +124,170 @@
   margin: 0;
 }
 
+.site-footer {
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+
+.hero {
+  display: grid;
+  min-height: 30rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(15rem, 0.8fr);
+  align-items: center;
+  gap: 2rem;
+  padding: clamp(2rem, 6vw, 5rem);
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(120deg, #fff 28%, #fbedee);
+}
+
+.hero h1 {
+  max-width: 12ch;
+  margin: 0.5rem 0 1rem;
+}
+
+.hero p {
+  max-width: 42rem;
+  color: var(--slate);
+  font-size: 1.1rem;
+}
+
+.hero .hero-login {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.hero-login a {
+  font-weight: 700;
+}
+
+.hero__art {
+  width: min(100%, 24rem);
+  justify-self: center;
+}
+
+.eyebrow {
+  color: var(--brand-deep);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.content-section {
+  padding: clamp(2rem, 5vw, 4rem) 0;
+}
+
+.content-section > h2,
+.content-section > p {
+  text-align: center;
+}
+
+.feature-card {
+  min-height: 100%;
+  padding: 1.5rem;
+}
+
+.feature-card__icon {
+  display: inline-grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--rose-tint);
+  color: var(--brand);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.blood-group-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.blood-group-card {
+  display: grid;
+  min-height: 130px;
+  align-content: center;
+  justify-items: center;
+  gap: 0.25rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+}
+
+.blood-group-card strong {
+  color: var(--brand);
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
+}
+
+.auth-shell {
+  display: grid;
+  min-height: 65vh;
+  place-items: center;
+}
+
+.auth-card {
+  width: min(100%, 42rem);
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.auth-card h1 {
+  margin-top: 0;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-header h1 {
+  margin: 0 0 0.4rem;
+}
+
+.dashboard-header p {
+  margin: 0;
+  color: var(--slate);
+}
+
+.stat-card {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #fff, #fff5f6);
+}
+
+.stat-card strong {
+  display: block;
+  color: var(--brand);
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
+.page-intro {
+  max-width: 50rem;
+  margin-bottom: 2rem;
+}
+
+.page-intro p {
+  color: var(--slate);
+}
+
 .unread-count[hidden] {
   display: none;
 }
@@ -123,6 +304,12 @@
 }
 
 @media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.7fr);
+    padding: 2rem;
+  }
+
   .site-nav {
     flex-wrap: wrap;
     justify-content: center;
@@ -135,6 +322,32 @@
 }
 
 @media (max-width: 540px) {
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero h1 {
+    max-width: none;
+  }
+
+  .hero__art {
+    width: min(70%, 15rem);
+    grid-row: 1;
+  }
+
+  .hero-actions {
+    justify-content: center;
+  }
+
+  .blood-group-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .split-layout {
+    grid-template-columns: 1fr;
+  }
+
   .site-nav__controls {
     width: 100%;
     justify-content: center;

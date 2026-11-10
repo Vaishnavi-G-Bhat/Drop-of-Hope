@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c8102e">
+    <title>Requester dashboard | Drop of Hope</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pages.css">
+  </head>
+  <body>
+    <main data-dashboard="patient">
+      <header class="dashboard-header">
+        <div><span class="eyebrow">Requester workspace</span><h1>Welcome, <span data-user-name>requester</span></h1><p>Create a request and track updates from your dashboard.</p></div>
+      </header>
+      <p id="dashboard-message" role="status" aria-live="polite"></p>
+      <section class="card dashboard-section" aria-labelledby="create-request-heading">
+        <h2 id="create-request-heading">Request blood</h2>
+        <p class="muted">Requests are visible to eligible matching donors and blood banks in your city. Required fields follow the backend request contract.</p>
+        <form id="request-form" class="form-grid">
+          <label class="form-field" for="patient_name">Patient name (optional)<input id="patient_name" name="patient_name" maxlength="255"></label>
+          <label class="form-field" for="blood_group">Blood group
+            <select id="blood_group" name="blood_group" required>
+              <option value="">Select a blood group</option>
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select>
+          </label>
+          <label class="form-field" for="units_needed">Units needed<input id="units_needed" name="units_needed" type="number" min="1" step="1" required></label>
+          <label class="form-field" for="urgency">Urgency
+            <select id="urgency" name="urgency" required><option>Normal</option><option>Urgent</option><option>Critical</option></select>
+          </label>
+          <label class="form-field" for="required_date">Required date<input id="required_date" name="required_date" type="date" required></label>
+          <label class="form-field" for="hospital_name">Hospital name (optional)<input id="hospital_name" name="hospital_name" maxlength="255"></label>
+          <label class="form-field" for="city">City<input id="city" name="city" maxlength="120" required></label>
+          <label class="form-field" for="area">Area<input id="area" name="area" maxlength="120"></label>
+          <label class="form-field" for="pin_code">PIN code<input id="pin_code" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required></label>
+          <label class="form-field" for="contact_phone">Contact phone (optional)<input id="contact_phone" name="contact_phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" maxlength="10"></label>
+          <label class="form-field form-field--wide" for="notes">Additional notes (optional)<textarea id="notes" name="notes" maxlength="2000"></textarea></label>
+          <div class="form-actions form-field--wide"><button class="button button--primary" type="submit">Submit blood request</button></div>
+        </form>
+      </section>
+      <section class="dashboard-section" aria-labelledby="my-requests-heading">
+        <h2 id="my-requests-heading">My requests</h2>
+        <div id="patient-requests" class="data-grid" aria-live="polite" aria-busy="true"></div>
+        <div id="request-detail" class="card dashboard-section" hidden></div>
+      </section>
+      <section class="card dashboard-section" aria-labelledby="availability-search-heading">
+        <h2 id="availability-search-heading">Search donors and blood banks</h2>
+        <form id="availability-search-form" class="form-grid">
+          <label class="form-field" for="search-group">Blood group
+            <select id="search-group" name="blood_group" required>
+              <option value="">Select a blood group</option>
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+            </select>
+          </label>
+          <label class="form-field" for="search-city">City<input id="search-city" name="city" maxlength="120"></label>
+          <label class="form-field" for="search-pin">PIN code<input id="search-pin" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6"></label>
+          <label class="form-field"><span><input type="checkbox" name="compatible" value="true"> Include compatible donor blood groups</span></label>
+          <div class="form-actions form-field--wide"><button class="button button--secondary" type="submit">Search availability</button></div>
+        </form>
+        <p id="availability-search-message" role="status" aria-live="polite"></p>
+        <div class="split-layout">
+          <div><h3>Potential donors</h3><div id="patient-donor-results" class="data-grid"></div></div>
+          <div><h3>Blood banks</h3><div id="patient-bank-results" class="data-grid"></div></div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/patient-dashboard.js"></script>
+  </body>
+</html>

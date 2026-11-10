@@ -12,4 +12,5 @@ export const STORAGE_KEYS = Object.freeze({
   language: 'drop-of-hope-language',
   textScale: 'drop-of-hope-text-scale',
   searchFilters: 'drop-of-hope-search-filters',
+  authenticated: 'drop-of-hope-authenticated',
 });
