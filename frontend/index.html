@@ -23,8 +23,8 @@
           <p>Connect with registered blood donors and verified blood banks. Find the next step when someone needs blood, or be ready to give when you can.</p>
           <p class="hero-login">Already have an account? <a href="./login.html">Log in</a></p>
           <div class="hero-actions">
-            <a class="button button--primary" href="./register.html?role=donor">Become a donor</a>
-            <a class="button button--secondary" href="./register.html?role=patient">Request blood</a>
+            <a class="button button--primary" href="./register.html?role=donor">Donate Blood</a>
+            <a class="button button--secondary" href="./register.html?role=patient">Request Blood</a>
           </div>
           <p class="form-hint">Information helps you connect; medical eligibility and availability must always be confirmed with a healthcare professional or blood bank.</p>
         </div>
@@ -53,12 +53,13 @@
         </div>
       </section>
 
-      <section class="content-section" aria-labelledby="awareness-title">
+      <section class="content-section" aria-labelledby="about-title">
         <div class="split-layout">
           <div>
-            <span class="eyebrow">Give with care</span>
-            <h2 id="awareness-title">A donation is a thoughtful act of care.</h2>
-            <p>Register your interest, keep your availability current, and follow guidance from qualified medical staff. Donation eligibility and timing vary by person and must be assessed by a healthcare professional.</p>
+            <span class="eyebrow">About us</span>
+            <h2 id="about-title">Drop of Hope brings urgent care closer to the community.</h2>
+            <p>We help emergency blood requests reach nearby donors and verified blood banks faster. The portal is designed to make blood donation coordination simpler, safer and more transparent for patients, families and healthcare teams.</p>
+            <p>Every listing is a real-world connection, and every donor is encouraged to confirm readiness directly with the receiving hospital or bank before donating.</p>
           </div>
           <aside class="notice notice--warning">
             <strong>Important</strong>
@@ -68,8 +69,35 @@
       </section>
 
       <section class="content-section" aria-labelledby="groups-title">
+        <span class="eyebrow">Blood groups</span>
+        <h2 id="groups-title">Know the basics before you donate or request</h2>
+        <div class="data-grid">
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">A+</span>
+            <h3>Most common</h3>
+            <p>A+ is among the most requested blood groups and often appears in local emergency searches.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">O-</span>
+            <h3>Universal donor</h3>
+            <p>O- is a critical emergency type used when the donor blood group is unknown or urgent.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">AB+</span>
+            <h3>Plasma rich</h3>
+            <p>AB+ donors play a vital role in many transfusion cases, and availability should always be confirmed.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="feature-card__icon" aria-hidden="true">Any</span>
+            <h3>Verified listings</h3>
+            <p>Check live blood-bank stock and donor availability to match the correct group and location.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="groups-live-title">
         <span class="eyebrow">Live availability</span>
-        <h2 id="groups-title">Blood groups reported by verified blood banks</h2>
+        <h2 id="groups-live-title">Blood groups reported by verified blood banks</h2>
         <p>Live totals are loaded from the backend. A missing result means no verified stock record was returned, not that a group is medically compatible.</p>
         <div id="blood-group-availability" class="blood-group-grid" aria-live="polite" aria-busy="true">
           <div class="skeleton" aria-hidden="true"></div>
@@ -100,8 +128,19 @@
       </section>
 
       <section class="content-section" aria-labelledby="contact-title">
-        <h2 id="contact-title">Questions or need help using the portal?</h2>
-        <p>For medical advice or urgent care, contact your healthcare provider or local emergency services. For account access, sign in and use the portal's available request and notification tools.</p>
+        <h2 id="contact-title">Contact us</h2>
+        <div class="split-layout">
+          <div class="card feature-card">
+            <h3>Support and coordination</h3>
+            <p><strong>Email:</strong> hello@dropofhope.org</p>
+            <p><strong>Phone:</strong> +91 98765 43210</p>
+            <p><strong>Hours:</strong> Monday to Saturday, 9:00 AM to 6:00 PM</p>
+          </div>
+          <div class="card feature-card">
+            <h3>For urgent medical needs</h3>
+            <p>For medical advice or emergency treatment, contact your healthcare provider or local emergency services directly. For portal support, use the contact details above or sign in to manage your account.</p>
+          </div>
+        </div>
       </section>
     </main>
     <script type="module" src="./js/layout.js"></script>
