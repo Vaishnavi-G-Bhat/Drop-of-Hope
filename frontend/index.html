@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Kannada:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/theme.css?v=3">
     <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/pages.css">
+    <link rel="stylesheet" href="./css/pages.css?v=3">
   </head>
   <body>
     <main data-page="home">
@@ -21,14 +21,14 @@
           <span class="eyebrow">Together, in the moments that matter</span>
           <h1 id="hero-title">A little hope can go a long way.</h1>
           <p>Connect with registered blood donors and verified blood banks. Find the next step when someone needs blood, or be ready to give when you can.</p>
-          <p class="hero-login">Already have an account? <a href="./login.html">Log in</a></p>
           <div class="hero-actions">
-            <a class="button button--primary" href="./register.html?role=donor">Donate Blood</a>
+            <a class="button button--primary" href="./login.html">Log in</a>
+            <a class="button button--secondary" href="./register.html?role=donor">Donate Blood</a>
             <a class="button button--secondary" href="./register.html?role=patient">Request Blood</a>
           </div>
           <p class="form-hint">Information helps you connect; medical eligibility and availability must always be confirmed with a healthcare professional or blood bank.</p>
         </div>
-        <img class="hero__art" src="./assets/hero-drop.svg" alt="" width="320" height="320">
+        <img class="hero__art" src="./assets/hero-drop1.jpg" alt="" width="320" height="320">
       </section>
 
       <section class="content-section" aria-labelledby="how-title">
@@ -108,6 +108,7 @@
         <p id="availability-message" class="form-hint" role="status"></p>
         <div class="hero-actions">
           <a class="button button--secondary" href="./search.html">Search live availability</a>
+          <a class="button button--secondary" href="./register.html?role=blood_bank">Register a blood bank</a>
         </div>
       </section>
 
@@ -143,7 +144,7 @@
         </div>
       </section>
     </main>
-    <script type="module" src="./js/layout.js"></script>
+    <script type="module" src="./js/layout.js?v=3"></script>
     <script type="module" src="./js/home.js"></script>
   </body>
 </html>

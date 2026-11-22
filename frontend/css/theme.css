@@ -1,19 +1,26 @@
 :root {
   color-scheme: light;
-  --brand: #c8102e;
-  --brand-deep: #8b0f1f;
-  --ink: #1f1417;
-  --rose-tint: #fbedee;
-  --blush: #f4a3ae;
-  --urgent: #e8590c;
-  --success: #2e7d5b;
+  --brand: #d91445;
+  --brand-deep: #a90f34;
+  --accent: #ed6a24;
+  --sunshine: #f5b52e;
+  --hero-gradient: linear-gradient(125deg, #9f1239 0%, #c2410c 68%, #b45309 100%);
+  --hero-foreground: #fff;
+  --hero-button-hover: #fff7ed;
+  --hero-outline-bg: rgb(0 0 0 / 12%);
+  --hero-outline-hover: rgb(0 0 0 / 22%);
+  --ink: #29151c;
+  --rose-tint: #ffe4e9;
+  --blush: #ef9cab;
+  --urgent: #d94d0b;
+  --success: #26734f;
   --amber: #8a5700;
   --amber-bg: #fff4d6;
   --slate: #5b6470;
   --surface: #fff;
-  --page: #fff9f9;
-  --border: #eadbdd;
-  --shadow-card: 0 12px 32px rgb(87 27 39 / 8%);
+  --page: #fff2f4;
+  --border: #edcbd2;
+  --shadow-card: 0 12px 32px rgb(115 21 49 / 12%);
   --radius-card: 18px;
   --radius-control: 12px;
   --font-body: 'Inter', 'Noto Sans Kannada', sans-serif;
@@ -33,6 +40,10 @@
 
 * {
   box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 body {

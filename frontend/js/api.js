@@ -1,4 +1,4 @@
-import { API_BASE } from './config.js';
+import { API_BASE } from './config.js?v=3';
 
 const REQUEST_TIMEOUT_MS = 15_000;
 

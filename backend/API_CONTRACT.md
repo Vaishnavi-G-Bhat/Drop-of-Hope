@@ -12,7 +12,7 @@ This project exposes all endpoints under `/api`.
 - GET `/api/auth/me`
 - PUT `/api/auth/language`
 
-Registration accepts `email`, `password` (at least 8 characters), `full_name`, and a 10-digit `phone`. Donors also provide `age` (18–65), `blood_group`, `city`, and a 6-digit `pin_code`; requesters provide `city` and may provide `area` and `pin_code`; blood banks provide `name`, `city`, and `pin_code`, with license, address, area, public contact phone, and opening hours optional. Public registration supports donor, patient, and blood-bank roles, not admin. Registration does not sign the account in. New donor and blood-bank accounts require admin verification to appear in public search.
+Registration accepts `email`, `password` (at least 8 characters, including uppercase and lowercase letters, a number, and a special character), `full_name`, and a 10-digit `phone`. Donors also provide `age` (18–65), `blood_group`, `country`, `state`, `district`, `city`, and a 6-digit `pin_code`; requesters provide `city` and may provide `area` and `pin_code`; blood banks provide `name`, `city`, and `pin_code`, with license, address, area, public contact phone, and opening hours optional. Public registration supports donor, patient, and blood-bank roles, not admin. Registration does not sign the account in. New donor and blood-bank accounts require admin verification to appear in public search.
 
 Authentication uses the Flask session cookie. Browser clients must send credentials and use a consistent hostname for the API and frontend.
 The backend currently supports email/password login only; Google OAuth is not implemented.
@@ -23,7 +23,7 @@ The backend currently supports email/password login only; Google OAuth is not im
 - GET `/api/search/blood-banks`
 - GET `/api/search/emergency`
 
-Search accepts optional `blood_group`, `city`, and `pin_code`; donor searches also accept `area` and `compatible=true`. Results contain verified, active listings. Contact fields are only returned for a signed-in session. Blood-bank search can be queried once per blood group; the API does not expose a consolidated inventory summary. Search results and stock are reported information and must be confirmed directly.
+Search accepts optional `blood_group`, `country`, `state`, `district`, `city`, and `pin_code`; donor searches also accept `area` and `compatible=true`. Results contain verified, active listings. Contact fields are only returned for a signed-in session. Emergency search accepts `location_scope=city` to include all matching donors in the city while ranking the request's PIN code and area first. Blood-bank search can be queried once per blood group; the API does not expose a consolidated inventory summary. Search results and stock are reported information and must be confirmed directly.
 
 ## Donor
 
@@ -36,6 +36,8 @@ Search accepts optional `blood_group`, `city`, and `pin_code`; donor searches al
 - POST `/api/donors/me/requests/<request_id>/respond`
 - GET `/api/donors/me/history`
 - GET `/api/donors/me/certificate`
+
+The donor request list contains open same-city requests matching the donor's blood group. It shows blood group, units, urgency, required date, hospital and location before acceptance. The requester's name, notes and phone are returned only after that donor accepts.
 
 ## Patient
 
@@ -65,11 +67,15 @@ Blood-bank profile and stock routes require the blood-bank role. The profile upd
 
 Request creation and status changes require the patient role. Creation requires blood group, units (at least one), and a future/current `required_date`, plus a valid city and 6-digit PIN code. Blood-bank request listing is read-only; there is no blood-bank endpoint for changing a request's status.
 
+After a requester confirms an accepted donation, the donor's `last_donation_date` and `total_donations` are updated once. Request details show verified same-city donor matches, with matching area and PIN code ranked first; donor contact details remain masked in search.
+
 ## Notifications
 
 - GET `/api/notifications`
 - PUT `/api/notifications/<id>/read`
 - PUT `/api/notifications/read-all`
+
+For donors with a recorded last donation date, polling notifications creates a follow-up reminder after 90 days. This is informational only, not medical clearance; donors should confirm eligibility with a licensed blood bank or healthcare professional.
 
 ## Admin
 

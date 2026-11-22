@@ -1,5 +1,5 @@
 import { api, ApiError } from './api.js';
-import { STORAGE_KEYS, appUrl } from './config.js';
+import { STORAGE_KEYS, appUrl } from './config.js?v=3';
 import { ui } from './ui.js';
 
 const DASHBOARDS = Object.freeze({

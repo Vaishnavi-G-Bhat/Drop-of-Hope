@@ -19,6 +19,9 @@ async function search() {
   const values = new FormData(form);
   const params = {
     blood_group: values.get('blood_group') || undefined,
+    country: String(values.get('country') || '').trim() || undefined,
+    state: String(values.get('state') || '').trim() || undefined,
+    district: String(values.get('district') || '').trim() || undefined,
     city: String(values.get('city') || '').trim() || undefined,
     pin_code: String(values.get('pin_code') || '').trim() || undefined,
     area: String(values.get('area') || '').trim() || undefined,

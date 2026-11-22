@@ -34,34 +34,24 @@ The frontend includes the public home and search pages, login and registration f
 
 ## Run locally
 
-Run the backend and frontend in separate terminals. Use the same hostname (`127.0.0.1` or `localhost`) for both so the browser sends the session cookie consistently.
+The Flask app serves both the frontend and API on port `5500`; only one server is needed.
 
 ### Windows (PowerShell)
 
-Terminal 1 — backend:
+Use Python 3.13 for the backend environment.
 
 ```powershell
 cd "D:\projects\Drop Of Hope\backend"
-python -m venv venv
-.\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-flask --app run init-db
-python seed.py
-python run.py
+py -3.13 -m venv venv
+.\venv\Scripts\python.exe -m pip install -r requirements.txt
+.\venv\Scripts\python.exe -m flask --app run init-db
+.\venv\Scripts\python.exe seed.py
+.\venv\Scripts\python.exe run.py
 ```
 
-Terminal 2 — frontend:
-
-```powershell
-cd "D:\projects\Drop Of Hope\frontend"
-python -m http.server 5500
-```
-
-Open the site at `http://127.0.0.1:5500/`. The backend administrator created by `python seed.py` is `admin@truedrop.local` / `Admin@123`. Register donor, requester, or blood-bank accounts through the site; donor and blood-bank accounts require administrator verification before they appear in public search.
+Open the site at `http://127.0.0.1:5500/`. The backend administrator created by the seed script is `admin@truedrop.local` / `Admin@123`. Register donor, requester, or blood-bank accounts through the site; donor and blood-bank accounts require administrator verification before they appear in public search.
 
 ### macOS / Linux
-
-Terminal 1 — backend:
 
 ```bash
 cd "Drop Of Hope/backend"
@@ -73,26 +63,19 @@ python seed.py
 python run.py
 ```
 
-Terminal 2 — frontend:
-
-```bash
-cd "Drop Of Hope/frontend"
-python3 -m http.server 5500
-```
-
 Open the site at `http://127.0.0.1:5500/`.
 
-The frontend uses browser ES modules, so serve it over HTTP rather than opening an HTML file with `file://`. A VS Code Live Server extension can also serve the `frontend/` folder.
+The frontend uses browser ES modules, so serve it through Flask over HTTP rather than opening an HTML file with `file://`.
 
 ## Frontend configuration
 
 Configuration is in `frontend/js/config.js`:
 
-- `API_BASE` defaults to the current page hostname on port `5000`, under `/api`. It can be overridden by setting `window.__API_BASE__` before the frontend modules load.
+- `API_BASE` defaults to the current page origin under `/api`, so the frontend and backend use the same port. It can be overridden by setting `window.__API_BASE__` before the frontend modules load.
 - `APP_NAME` is the frontend wordmark and product name.
 - `DEMO_MODE` is currently `false`; demo-mode behavior has not been implemented.
 
-The frontend sends API requests with credentials enabled so the backend session cookie can be used. Do not mix `localhost` and `127.0.0.1` between the frontend and backend.
+The frontend sends API requests with credentials enabled so the backend session cookie can be used.
 
 ## Frontend foundation
 

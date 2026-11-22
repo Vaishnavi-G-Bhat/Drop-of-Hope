@@ -1,6 +1,6 @@
 import { ApiError, api } from './api.js';
 import { redirectAfterLogin } from './auth.js';
-import { STORAGE_KEYS } from './config.js';
+import { STORAGE_KEYS } from './config.js?v=3';
 import { ui } from './ui.js';
 import { setMessage } from './view-utils.js';
 

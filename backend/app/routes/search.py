@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 
 from flask import Blueprint, request, session
+from sqlalchemy import func
 
 from ..extensions import db
 from ..models import BloodBank, BloodStock, Donor, User
@@ -12,7 +13,7 @@ from ..utils.responses import success_response
 search_bp = Blueprint('search', __name__)
 
 
-def donor_location_score(donor, city=None, pin_code=None, area=None):
+def donor_location_score(donor, city=None, pin_code=None, area=None, country=None, state=None, district=None):
     score = 0
     if pin_code and donor.pin_code == pin_code:
         score += 3
@@ -20,10 +21,16 @@ def donor_location_score(donor, city=None, pin_code=None, area=None):
         score += 2
     if city and donor.city.lower() == city.lower():
         score += 1
+    if country and donor.country and donor.country.lower() == country.lower():
+        score += 1
+    if state and donor.state and donor.state.lower() == state.lower():
+        score += 1
+    if district and donor.district and donor.district.lower() == district.lower():
+        score += 1
     return score
 
 
-def donor_list_query(blood_group=None, city=None, pin_code=None, area=None, compatible=False):
+def donor_list_query(blood_group=None, city=None, pin_code=None, area=None, compatible=False, country=None, state=None, district=None):
     q = Donor.query.join(User, User.id == Donor.user_id).filter(
         User.is_verified == True,
         User.is_active == True,
@@ -41,11 +48,14 @@ def donor_list_query(blood_group=None, city=None, pin_code=None, area=None, comp
         else:
             q = q.filter(Donor.blood_group == blood_group)
     if city:
-        q = q.filter(Donor.city == city)
+        q = q.filter(func.lower(Donor.city) == city.lower())
     if pin_code:
         q = q.filter(Donor.pin_code == pin_code)
     if area:
-        q = q.filter(Donor.area == area)
+        q = q.filter(func.lower(Donor.area) == area.lower())
+    for field, value in ((Donor.country, country), (Donor.state, state), (Donor.district, district)):
+        if value:
+            q = q.filter(func.lower(field) == value.lower())
     return q.order_by(Donor.status_updated_at.desc())
 
 
@@ -55,18 +65,24 @@ def search_donors():
     city = request.args.get('city')
     pin_code = request.args.get('pin_code')
     area = request.args.get('area')
+    country = request.args.get('country')
+    state = request.args.get('state')
+    district = request.args.get('district')
     compatible = request.args.get('compatible', 'false').lower() == 'true'
-    donors = donor_list_query(blood_group, city, pin_code, area, compatible).all()
+    donors = donor_list_query(blood_group, city, pin_code, area, compatible, country, state, district).all()
     rows = []
     for donor in donors:
         latest = freshness_for(donor.status_updated_at, 30)
-        score = donor_location_score(donor, city, pin_code, area) + (2 if latest == 'Current' else 0) + (
+        score = donor_location_score(donor, city, pin_code, area, country, state, district) + (2 if latest == 'Current' else 0) + (
             2 if donor.availability_status == 'Available' else 1 if donor.availability_status == 'Contact me first' else 0
         )
         row = {
             'id': donor.id,
             'display_name': display_name(donor.user.full_name),
             'blood_group': donor.blood_group,
+            'country': donor.country,
+            'state': donor.state,
+            'district': donor.district,
             'city': donor.city,
             'area': donor.area,
             'availability_status': donor.availability_status,
@@ -128,27 +144,51 @@ def emergency_search():
     city = request.args.get('city')
     pin_code = request.args.get('pin_code')
     compatible = request.args.get('compatible', 'false').lower() == 'true'
-    donors = donor_list_query(blood_group, city, pin_code, request.args.get('area'), compatible).all()
+    city_scope = request.args.get('location_scope') == 'city'
+    country = request.args.get('country')
+    state = request.args.get('state')
+    district = request.args.get('district')
+    area = request.args.get('area')
+    donors = donor_list_query(
+        blood_group,
+        city,
+        None if city_scope else pin_code,
+        None if city_scope else area,
+        compatible,
+        country,
+        state,
+        district,
+    ).all()
     donor_items = []
     for donor in donors:
+        latest = freshness_for(donor.status_updated_at, 30)
+        match_score = donor_location_score(
+            donor, city, pin_code, area, country, state, district
+        ) + (2 if latest == 'Current' else 0) + (
+            2 if donor.availability_status == 'Available' else 1 if donor.availability_status == 'Contact me first' else 0
+        )
         donor_items.append({
             'id': donor.id,
             'display_name': display_name(donor.user.full_name),
             'blood_group': donor.blood_group,
+            'country': donor.country,
+            'state': donor.state,
+            'district': donor.district,
             'city': donor.city,
             'area': donor.area,
             'availability_status': donor.availability_status,
-            'freshness': freshness_for(donor.status_updated_at, 30),
+            'freshness': latest,
             'last_updated_at': donor.status_updated_at.isoformat() if donor.status_updated_at else None,
             'verified': bool(donor.user.is_verified),
-            'match_score': donor_location_score(donor, city, pin_code, request.args.get('area')),
+            'match_score': match_score,
             'masked_phone': mask_phone(donor.user.phone) if 'user_id' in session else None,
         })
+    donor_items.sort(key=lambda item: -item['match_score'])
 
     bank_q = BloodBank.query.join(User, User.id == BloodBank.user_id).filter(User.is_verified == True, User.is_active == True)
     if city:
-        bank_q = bank_q.filter(BloodBank.city == city)
-    if pin_code:
+        bank_q = bank_q.filter(func.lower(BloodBank.city) == city.lower())
+    if pin_code and not city_scope:
         bank_q = bank_q.filter(BloodBank.pin_code == pin_code)
     bank_items = []
     for bank in bank_q.all():

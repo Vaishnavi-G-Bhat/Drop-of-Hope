@@ -30,12 +30,13 @@ export function setFormValues(form, values) {
 
 export function renderSearchResults({ donors, banks }, donorTarget, bankTarget) {
   donorTarget.replaceChildren();
-  bankTarget.replaceChildren();
+  bankTarget?.replaceChildren();
 
   for (const donor of donors || []) {
     const card = element('article', 'data-card');
     card.append(element('h3', '', donor.display_name || 'Registered donor'));
-    card.append(element('p', '', `${donor.blood_group} · ${donor.city}${donor.area ? `, ${donor.area}` : ''}`));
+    const location = [donor.city, donor.district, donor.state, donor.country, donor.area].filter(Boolean).join(', ');
+    card.append(element('p', '', `${donor.blood_group} · ${location}`));
     card.append(ui.statusBadge(donor.availability_status));
     card.append(ui.statusBadge(donor.freshness || 'Needs confirmation', donor.freshness === 'Current' ? 'success' : 'warning'));
     if (donor.masked_phone) {
@@ -63,13 +64,18 @@ export function renderSearchResults({ donors, banks }, donorTarget, bankTarget) 
     } else {
       card.append(element('p', 'muted', 'Sign in to view contact details when the backend permits.'));
     }
-    bankTarget.append(card);
+    bankTarget?.append(card);
   }
 
   if (!donorTarget.childElementCount) {
-    donorTarget.append(ui.emptyState('No matching donors found', 'Try another blood group or location.', null, null));
+    donorTarget.append(ui.emptyState(
+      'No matching donors found',
+      'Only verified donors appear in search. If your donor account is missing, ask an administrator to verify it. Also check the blood group and location.',
+      null,
+      null,
+    ));
   }
-  if (!bankTarget.childElementCount) {
+  if (bankTarget && !bankTarget.childElementCount) {
     bankTarget.append(ui.emptyState('No matching blood banks found', 'Try another location or blood group.', null, null));
   }
 }

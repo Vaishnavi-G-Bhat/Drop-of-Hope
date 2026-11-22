@@ -6,25 +6,43 @@
     <meta name="theme-color" content="#c8102e">
     <title>Create an account | Drop of Hope</title>
     <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="./css/theme.css">
+    <link rel="stylesheet" href="./css/theme.css?v=3">
     <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/pages.css">
+    <link rel="stylesheet" href="./css/pages.css?v=3">
   </head>
   <body>
     <main class="auth-shell" data-page="register">
       <section class="card auth-card" aria-labelledby="register-title">
-        <span class="eyebrow">Join the community</span>
-        <h1 id="register-title">Create your account</h1>
-        <p class="muted">Choose the account type that matches how you will use the portal. Admin accounts are created by the backend administrator, not through public registration.</p>
-        <form id="register-form">
+        <div id="account-options">
+          <span class="eyebrow">Join the community</span>
+          <h1 id="register-title">Create your account</h1>
+          <p class="muted">Choose one account type to continue. Each account has its own registration form.</p>
+          <div class="data-grid">
+            <a class="card feature-card" href="./register.html?role=donor">
+              <span class="feature-card__icon" aria-hidden="true">+</span>
+              <h2>Blood donor</h2>
+              <p>Register as a donor and manage your availability.</p>
+            </a>
+            <a class="card feature-card" href="./register.html?role=patient">
+              <span class="feature-card__icon" aria-hidden="true">?</span>
+              <h2>Blood requester</h2>
+              <p>Create and track blood requests.</p>
+            </a>
+            <a class="card feature-card" href="./register.html?role=blood_bank">
+              <span class="feature-card__icon" aria-hidden="true">+</span>
+              <h2>Blood bank</h2>
+              <p>Register your bank to manage reported stock and requests.</p>
+            </a>
+          </div>
+          <p class="form-hint">Admin accounts are created by the backend administrator.</p>
+        </div>
+        <div id="registration-form-panel" hidden>
+          <a class="text-button" href="./register.html">← Choose a different account type</a>
+          <span class="eyebrow" id="registration-eyebrow">Join the community</span>
+          <h1 id="registration-title">Create your account</h1>
+          <p class="muted" id="registration-description"></p>
+          <form id="register-form">
           <div class="stack">
-            <label class="form-field" for="role">I am registering as
-              <select id="role" name="role" required>
-                <option value="donor">Blood donor</option>
-                <option value="patient">Blood requester / patient</option>
-                <option value="blood_bank">Blood bank</option>
-              </select>
-            </label>
             <div class="form-grid">
               <label class="form-field" for="full_name">Full name
                 <input id="full_name" name="full_name" autocomplete="name" maxlength="255" required>
@@ -37,7 +55,8 @@
                 <span id="phone-hint" class="form-hint">Enter 10 digits.</span>
               </label>
               <label class="form-field" for="password">Password
-                <input id="password" name="password" type="password" minlength="8" autocomplete="new-password" required>
+                <input id="password" name="password" type="password" minlength="8" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{8,}" title="Use at least 8 characters, including uppercase and lowercase letters, a number, and a special character." autocomplete="new-password" aria-describedby="password-requirements" required>
+                <span id="password-requirements" class="form-hint">At least 8 characters, with uppercase and lowercase letters, a number, and a special character (for example, ! or #).</span>
               </label>
             </div>
             <label><input id="show-password" type="checkbox"> Show password</label>
@@ -57,6 +76,15 @@
               <label class="form-field" for="donor-city">City
                 <input id="donor-city" name="city" maxlength="120" required>
               </label>
+              <label class="form-field" for="donor-country">Country
+                <input id="donor-country" name="country" value="India" maxlength="120" required>
+              </label>
+              <label class="form-field" for="donor-state">State
+                <input id="donor-state" name="state" maxlength="120" required>
+              </label>
+              <label class="form-field" for="donor-district">District
+                <input id="donor-district" name="district" maxlength="120" required>
+              </label>
               <label class="form-field" for="donor-area">Area (optional)
                 <input id="donor-area" name="area" maxlength="120">
               </label>
@@ -65,7 +93,7 @@
               </label>
             </fieldset>
 
-            <fieldset id="patient-fields" class="form-grid" hidden>
+            <fieldset id="patient-fields" class="form-grid" hidden disabled>
               <legend class="form-field--wide">Requester details</legend>
               <label class="form-field" for="patient-city">City
                 <input id="patient-city" name="city" maxlength="120" required>
@@ -78,7 +106,7 @@
               </label>
             </fieldset>
 
-            <fieldset id="bank-fields" class="form-grid" hidden>
+            <fieldset id="bank-fields" class="form-grid" hidden disabled>
               <legend class="form-field--wide">Blood bank details</legend>
               <label class="form-field" for="bank-name">Blood bank name
                 <input id="bank-name" name="name" maxlength="255" required>
@@ -108,11 +136,12 @@
             <button class="button button--primary" type="submit">Create account</button>
             <p id="form-message" role="status" aria-live="polite"></p>
           </div>
-        </form>
-        <p class="muted">Already registered? <a href="./login.html">Log in</a>.</p>
+          </form>
+          <p class="muted">Already registered? <a href="./login.html">Log in</a>.</p>
+        </div>
       </section>
     </main>
-    <script type="module" src="./js/layout.js"></script>
-    <script type="module" src="./js/register.js"></script>
+    <script type="module" src="./js/layout.js?v=3"></script>
+    <script type="module" src="./js/register.js?v=5"></script>
   </body>
 </html>

@@ -19,8 +19,18 @@ def validate_email(value):
 
 
 def validate_password(value):
-    if not value or len(value) < 8:
-        raise ValueError('Password must be at least 8 characters long')
+    if (
+        not isinstance(value, str)
+        or not value
+        or len(value) < 8
+        or not re.search(r'[a-z]', value)
+        or not re.search(r'[A-Z]', value)
+        or not re.search(r'\d', value)
+        or not re.search(r'[^A-Za-z0-9]', value)
+    ):
+        raise ValueError(
+            'Password must be at least 8 characters long and include uppercase and lowercase letters, a number, and a special character'
+        )
     return value
 
 

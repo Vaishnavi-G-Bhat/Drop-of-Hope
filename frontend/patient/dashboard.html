@@ -6,9 +6,9 @@
     <meta name="theme-color" content="#c8102e">
     <title>Requester dashboard | Drop of Hope</title>
     <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/theme.css?v=3">
     <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/pages.css?v=3">
   </head>
   <body>
     <main data-dashboard="patient">
@@ -18,7 +18,7 @@
       <p id="dashboard-message" role="status" aria-live="polite"></p>
       <section class="card dashboard-section" aria-labelledby="create-request-heading">
         <h2 id="create-request-heading">Request blood</h2>
-        <p class="muted">Requests are visible to eligible matching donors and blood banks in your city. Required fields follow the backend request contract.</p>
+        <p class="muted">Requests are visible to eligible matching donors and blood banks in your city. After submission, verified same-city donors are listed in the request details, with matching area and PIN code first; contact details stay masked.</p>
         <form id="request-form" class="form-grid">
           <label class="form-field" for="patient_name">Patient name (optional)<input id="patient_name" name="patient_name" maxlength="255"></label>
           <label class="form-field" for="blood_group">Blood group
@@ -57,6 +57,9 @@
               <option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
             </select>
           </label>
+          <label class="form-field" for="search-country">Country<input id="search-country" name="country" maxlength="120"></label>
+          <label class="form-field" for="search-state">State<input id="search-state" name="state" maxlength="120"></label>
+          <label class="form-field" for="search-district">District<input id="search-district" name="district" maxlength="120"></label>
           <label class="form-field" for="search-city">City<input id="search-city" name="city" maxlength="120"></label>
           <label class="form-field" for="search-pin">PIN code<input id="search-pin" name="pin_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6"></label>
           <label class="form-field"><span><input type="checkbox" name="compatible" value="true"> Include compatible donor blood groups</span></label>
@@ -69,7 +72,7 @@
         </div>
       </section>
     </main>
-    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/layout.js?v=3"></script>
     <script type="module" src="../js/patient-dashboard.js"></script>
   </body>
 </html>

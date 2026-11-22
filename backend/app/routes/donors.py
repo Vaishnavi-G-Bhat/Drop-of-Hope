@@ -1,6 +1,7 @@
 from datetime import date, datetime, timezone
 
 from flask import Blueprint, request, session
+from sqlalchemy import func
 
 from ..extensions import db
 from ..models import BloodRequest, DonationResponse, Donor, Notification, User
@@ -24,6 +25,9 @@ def donor_me():
         'phone': donor.user.phone,
         'age': donor.age,
         'blood_group': donor.blood_group,
+        'country': donor.country,
+        'state': donor.state,
+        'district': donor.district,
         'city': donor.city,
         'area': donor.area,
         'pin_code': donor.pin_code,
@@ -45,6 +49,12 @@ def update_donor_me():
         donor.age = validate_age(payload['age'])
     if 'city' in payload:
         donor.city = (payload['city'] or '').strip() or donor.city
+    for field in ('country', 'state', 'district'):
+        if field in payload:
+            value = (payload[field] or '').strip()
+            if not value:
+                return error_response('VALIDATION_ERROR', f'{field} is required', 400)
+            setattr(donor, field, value)
     if 'area' in payload:
         donor.area = (payload['area'] or '').strip()
     if 'pin_code' in payload:
@@ -52,7 +62,13 @@ def update_donor_me():
     if 'phone' in payload:
         donor.user.phone = validate_phone(payload['phone'])
     if 'last_donation_date' in payload and payload['last_donation_date']:
-        donor.last_donation_date = date.fromisoformat(payload['last_donation_date'])
+        try:
+            last_donation_date = date.fromisoformat(payload['last_donation_date'])
+        except (TypeError, ValueError):
+            return error_response('VALIDATION_ERROR', 'last_donation_date must be a valid ISO date', 400)
+        if last_donation_date > datetime.now(timezone.utc).date():
+            return error_response('VALIDATION_ERROR', 'last_donation_date cannot be in the future', 400)
+        donor.last_donation_date = last_donation_date
     db.session.commit()
     return success_response({'status': 'updated'}, 'Donor profile updated.')
 
@@ -103,20 +119,42 @@ def donor_requests():
     page = max(int(request.args.get('page', 1)), 1)
     per_page = min(max(int(request.args.get('per_page', 10)), 1), 50)
     donor = User.query.get(session['user_id']).donor
-    query = BloodRequest.query.filter(BloodRequest.status != 'Resolved').filter(BloodRequest.status != 'Cancelled')
+    query = BloodRequest.query.filter(
+        BloodRequest.status.notin_(['Resolved', 'Cancelled']),
+        func.lower(BloodRequest.city) == donor.city.lower(),
+    ).order_by(BloodRequest.created_at.desc())
+    responses = {
+        response.request_id: response
+        for response in DonationResponse.query.filter_by(donor_id=donor.id).all()
+    }
     items = []
     for req in query.all():
         if donor.blood_group == req.blood_group:
-            items.append({
+            response = responses.get(req.id)
+            item = {
                 'id': req.id,
                 'city': req.city,
                 'area': req.area,
                 'pin_code': req.pin_code,
                 'blood_group': req.blood_group,
+                'units_needed': req.units_needed,
                 'hospital_name': req.hospital_name,
+                'required_date': req.required_date.isoformat() if req.required_date else None,
                 'urgency': req.urgency,
                 'status': req.status,
-            })
+                'response': response.response if response else None,
+            }
+            if response and response.response == 'Accepted':
+                item.update({
+                    'patient_name': req.patient_name,
+                    'contact_phone': req.contact_phone or None,
+                    'notes': req.notes,
+                })
+            items.append(item)
+    items.sort(key=lambda item: (
+        item['pin_code'] != donor.pin_code,
+        (item['area'] or '').lower() != (donor.area or '').lower(),
+    ))
     total = len(items)
     start = (page - 1) * per_page
     end = start + per_page

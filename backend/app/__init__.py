@@ -1,4 +1,7 @@
-from flask import Flask
+from pathlib import Path
+
+from flask import Flask, send_from_directory
+from sqlalchemy import inspect, text
 
 from .cli import register_cli
 from .config import Config
@@ -14,9 +17,11 @@ from .routes.requests import requests_bp
 from .routes.search import search_bp
 from .utils.responses import error_response
 
+FRONTEND_DIR = Path(__file__).resolve().parents[2] / 'frontend'
+
 
 def create_app(test_config=None):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder=None)
     app.config.from_object(Config)
     if test_config:
         app.config.from_mapping(test_config)
@@ -34,6 +39,21 @@ def create_app(test_config=None):
     app.register_blueprint(notifications_bp, url_prefix='/api')
     app.register_blueprint(reports_bp, url_prefix='/api')
     app.register_blueprint(admin_bp, url_prefix='/api/admin')
+
+    @limiter.exempt
+    @app.get('/')
+    def serve_frontend():
+        return serve_frontend_file('index.html')
+
+    @limiter.exempt
+    @app.get('/<path:filename>')
+    def serve_frontend_asset(filename):
+        return serve_frontend_file(filename)
+
+    def serve_frontend_file(filename):
+        response = send_from_directory(FRONTEND_DIR, filename, conditional=False)
+        response.headers['Cache-Control'] = 'no-store'
+        return response
 
     @app.errorhandler(400)
     def handle_400(_error):
@@ -70,4 +90,13 @@ def create_app(test_config=None):
     register_cli(app)
     with app.app_context():
         db.create_all()
+        donor_columns = {column['name'] for column in inspect(db.engine).get_columns('donors')}
+        for name, definition in (
+            ('country', "VARCHAR(120) NOT NULL DEFAULT 'India'"),
+            ('state', 'VARCHAR(120)'),
+            ('district', 'VARCHAR(120)'),
+        ):
+            if name not in donor_columns:
+                db.session.execute(text(f'ALTER TABLE donors ADD COLUMN {name} {definition}'))
+        db.session.commit()
     return app

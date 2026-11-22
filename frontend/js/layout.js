@@ -1,5 +1,5 @@
-import { APP_NAME, STORAGE_KEYS, appUrl } from './config.js';
-import { getLanguage, setLanguage, t } from './i18n.js';
+import { APP_NAME, STORAGE_KEYS, appUrl } from './config.js?v=3';
+import { getLanguage, localizeDocument, observeLocalizedContent, setLanguage, t } from './i18n.js?v=3';
 import { startUnreadCountRefresh } from './auth.js';
 
 function element(tag, className, text) {
@@ -47,7 +47,7 @@ function buildNavbar() {
   dashboardLink.dataset.userDashboard = '';
   dashboardLink.hidden = true;
   const notificationsLink = link('notifications.html', 'notifications');
-  links.append(homeLink, searchLink, loginLink, registerLink, dashboardLink, notificationsLink);
+  links.append(loginLink, homeLink, searchLink, registerLink, dashboardLink, notificationsLink);
 
   const unread = element('span', 'unread-count', '0');
   unread.dataset.unreadCount = '';
@@ -77,12 +77,17 @@ function buildNavbar() {
 
   const textControls = element('div', 'text-size-controls');
   textControls.setAttribute('aria-label', t('textSize'));
-  for (const [label, delta] of [['A−', -1], ['A', 0], ['A+', 1]]) {
+  for (const [icon, label, delta] of [
+    ['−', t('textSizeDecrease'), -1],
+    ['↺', t('textSizeReset'), 0],
+    ['+', t('textSizeIncrease'), 1],
+  ]) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'text-button';
-    button.textContent = label;
-    button.setAttribute('aria-label', `${t('textSize')} ${label}`);
+    button.textContent = icon;
+    button.title = label;
+    button.setAttribute('aria-label', `${t('textSize')}: ${label}`);
     button.addEventListener('click', () => adjustTextSize(delta));
     textControls.append(button);
   }
@@ -108,11 +113,7 @@ function buildFooter() {
   logo.width = 30;
   logo.height = 30;
   const text = element('p', '', `${APP_NAME} — ${t('footerText')}`);
-  text.dataset.i18n = 'footerText';
   footer.append(logo, text);
-  window.addEventListener('app:languagechange', () => {
-    text.textContent = `${APP_NAME} — ${t('footerText')}`;
-  });
   return footer;
 }
 
@@ -125,6 +126,7 @@ function initializeLayout() {
   );
 
   const skipLink = element('a', 'skip-link', t('skipToContent'));
+  skipLink.dataset.i18n = 'skipToContent';
   skipLink.href = '#main-content';
   document.body.prepend(skipLink);
 
@@ -141,6 +143,8 @@ function initializeLayout() {
   } else {
     document.body.append(header, footer);
   }
+  localizeDocument();
+  observeLocalizedContent();
   startUnreadCountRefresh();
 }
 

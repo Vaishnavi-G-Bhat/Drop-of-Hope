@@ -59,6 +59,23 @@ async function loadRequests() {
   }
 }
 
+async function loadNearbyDonors(request, target) {
+  target.replaceChildren(element('p', 'muted', 'Searching verified donors in this city…'));
+  try {
+    const { data } = await api.search.emergency({
+      blood_group: request.blood_group,
+      city: request.city,
+      area: request.area || undefined,
+      pin_code: request.pin_code || undefined,
+      location_scope: 'city',
+    });
+    renderSearchResults({ donors: data.donors?.items || [], banks: [] }, target, null);
+  } catch (error) {
+    target.replaceChildren(element('p', 'notice notice--error', error.message));
+    ui.handleError(error);
+  }
+}
+
 async function loadRequestDetail(requestId) {
   detailTarget.hidden = false;
   detailTarget.replaceChildren(element('p', 'muted', 'Loading request details…'));
@@ -126,6 +143,20 @@ async function loadRequestDetail(requestId) {
       timeline.append(entry);
     }
     detailTarget.append(timeline);
+
+    if (!['Resolved', 'Cancelled'].includes(request.status)) {
+      const nearbyDonors = element('section', 'dashboard-section');
+      nearbyDonors.append(element('h4', '', 'Nearby verified donors'));
+      nearbyDonors.append(element(
+        'p',
+        'muted',
+        'All verified donors in this city are shown, with matching area and PIN code first. Contact details remain masked.',
+      ));
+      const donorTarget = element('div', 'data-grid');
+      nearbyDonors.append(donorTarget);
+      detailTarget.append(nearbyDonors);
+      await loadNearbyDonors(request, donorTarget);
+    }
   } catch (error) {
     detailTarget.replaceChildren(element('p', 'notice notice--error', error.message));
     ui.handleError(error);
@@ -144,6 +175,9 @@ async function runAvailabilitySearch(event) {
   try {
     const { data } = await api.search.emergency({
       blood_group: values.get('blood_group'),
+      country: String(values.get('country') || '').trim() || undefined,
+      state: String(values.get('state') || '').trim() || undefined,
+      district: String(values.get('district') || '').trim() || undefined,
       city: String(values.get('city') || '').trim() || undefined,
       pin_code: String(values.get('pin_code') || '').trim() || undefined,
       compatible: values.get('compatible') === 'true',

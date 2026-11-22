@@ -42,11 +42,14 @@ def register_donor():
         age = validate_age(payload.get('age'))
         blood_group = payload.get('blood_group')
         city = (payload.get('city') or '').strip()
+        country = (payload.get('country') or '').strip()
+        state = (payload.get('state') or '').strip()
+        district = (payload.get('district') or '').strip()
         pin_code = validate_pincode(payload.get('pin_code'))
         if blood_group not in {'A+','A-','B+','B-','AB+','AB-','O+','O-'}:
             raise ValueError('Invalid blood_group')
-        if not city:
-            raise ValueError('city is required')
+        if not all((country, state, district, city)):
+            raise ValueError('country, state, district, and city are required')
         if User.query.filter_by(email=email).first():
             return error_response('CONFLICT', 'Email already registered.', 409)
         user = User(
@@ -65,6 +68,9 @@ def register_donor():
             user_id=user.id,
             age=age,
             blood_group=blood_group,
+            country=country,
+            state=state,
+            district=district,
             city=city,
             area=(payload.get('area') or '').strip() or None,
             pin_code=pin_code,

@@ -1,5 +1,5 @@
-import { t } from './i18n.js';
-import { appUrl } from './config.js';
+import { t } from './i18n.js?v=3';
+import { appUrl } from './config.js?v=3';
 
 function makeElement(tag, className, text) {
   const element = document.createElement(tag);

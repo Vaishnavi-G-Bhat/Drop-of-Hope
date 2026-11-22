@@ -192,6 +192,8 @@ def update_request_status(request_id):
 @role_required('patient')
 def confirm_donation(request_id):
     req = BloodRequest.query.filter_by(id=request_id, requester_id=session['user_id']).first_or_404()
+    if req.status in {'Resolved', 'Cancelled'}:
+        return error_response('CONFLICT', 'This request is already closed.', 409)
     payload = request.get_json(silent=True) or {}
     donor_id = payload.get('donor_id')
     response = DonationResponse.query.filter_by(request_id=req.id, donor_id=donor_id, response='Accepted').first()

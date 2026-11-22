@@ -1,7 +1,9 @@
+from datetime import datetime, timedelta, timezone
+
 from flask import Blueprint, request, session
 
 from ..extensions import db
-from ..models import Notification
+from ..models import Notification, User
 from ..utils.auth import login_required
 from ..utils.responses import success_response
 
@@ -11,6 +13,31 @@ notifications_bp = Blueprint('notifications', __name__)
 @notifications_bp.route('/notifications', methods=['GET'])
 @login_required
 def list_notifications():
+    user = User.query.get(session['user_id'])
+    if user.role == 'donor' and user.donor and user.donor.last_donation_date:
+        donation_date = user.donor.last_donation_date
+        due_date = donation_date + timedelta(days=90)
+        if due_date <= datetime.now(timezone.utc).date():
+            title = f'90-day donation follow-up ({donation_date.isoformat()})'
+            existing = Notification.query.filter_by(
+                user_id=user.id,
+                type='system',
+                title=title,
+            ).first()
+            if not existing:
+                db.session.add(Notification(
+                    user_id=user.id,
+                    type='system',
+                    title=title,
+                    message=(
+                        'It has been 90 days since the donation date recorded in your profile. '
+                        'This is a reminder to ask a licensed blood bank or healthcare professional '
+                        'whether you are eligible. It is not medical clearance; timing depends on '
+                        'donation type, local guidance, and your health.'
+                    ),
+                ))
+                db.session.commit()
+
     page = max(int(request.args.get('page', 1)), 1)
     per_page = min(max(int(request.args.get('per_page', 10)), 1), 50)
     q = Notification.query.filter_by(user_id=session['user_id'])

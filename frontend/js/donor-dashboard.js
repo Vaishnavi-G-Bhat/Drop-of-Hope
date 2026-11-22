@@ -11,6 +11,10 @@ const requestsTarget = document.querySelector('#donor-requests');
 const historyTarget = document.querySelector('#donor-history');
 const saveProfileButton = profileForm.querySelector('button[type="submit"]');
 const saveAvailabilityButton = availabilityForm.querySelector('button[type="submit"]');
+const today = new Date();
+profileForm.elements.last_donation_date.max = new Date(
+  today.getTime() - today.getTimezoneOffset() * 60_000,
+).toISOString().slice(0, 10);
 
 async function loadRequests(history = []) {
   const { data } = await api.donor.requests({ per_page: 50 });
@@ -22,12 +26,24 @@ async function loadRequests(history = []) {
     requestsTarget.append(ui.emptyState('No matching requests right now', 'Requests are shown here when they match your blood group.', null, null));
     return;
   }
-
   for (const request of data.items) {
     const card = element('article', 'data-card');
-    card.append(element('h3', '', `${request.blood_group} request`));
+    card.append(element('h3', '', `${request.blood_group} request · ${request.units_needed} unit(s)`));
+    card.append(element('p', '', `Required by: ${request.required_date || 'not specified'}`));
     card.append(element('p', '', [request.hospital_name, request.area, request.city, request.pin_code].filter(Boolean).join(' · ')));
     card.append(element('p', '', `Urgency: ${request.urgency} · Status: ${request.status}`));
+    if (request.response === 'Accepted') {
+      card.append(element('h4', '', 'Requester details'));
+      if (request.patient_name) {
+        card.append(element('p', '', `Patient name: ${request.patient_name}`));
+      }
+      if (request.contact_phone) {
+        card.append(element('p', '', `Contact: ${request.contact_phone}`));
+      }
+      if (request.notes) {
+        card.append(element('p', '', `Notes: ${request.notes}`));
+      }
+    }
     if (responded.has(request.id)) {
       card.append(element('p', 'muted', `You already responded: ${history.find((item) => item.request_id === request.id)?.response || ''}`));
     } else if (['Resolved', 'Cancelled'].includes(request.status)) {
@@ -106,6 +122,9 @@ async function initialize() {
     const payload = {
       age: Number(values.get('age')),
       phone: String(values.get('phone')).trim(),
+      country: String(values.get('country')).trim(),
+      state: String(values.get('state')).trim(),
+      district: String(values.get('district')).trim(),
       city: String(values.get('city')).trim(),
       area: String(values.get('area') || '').trim(),
       pin_code: String(values.get('pin_code')).trim(),
@@ -116,7 +135,10 @@ async function initialize() {
     ui.setBusy(saveProfileButton, true, 'Save profile');
     try {
       const result = await api.donor.update(payload);
-      setMessage(message, result.message || 'Profile updated.', 'success');
+      const successMessage = payload.last_donation_date
+        ? 'Donation date saved. An in-app reminder will appear after 90 days; this is not medical clearance. Confirm eligibility with a healthcare professional.'
+        : result.message || 'Profile updated.';
+      setMessage(message, successMessage, 'success');
       await loadDashboard();
     } catch (error) {
       setMessage(message, error.message, 'error');

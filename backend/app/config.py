@@ -10,6 +10,7 @@ APP_NAME = 'TrueDrop'
 
 
 class Config:  # pragma: no cover
+    SEND_FILE_MAX_AGE_DEFAULT = 0
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', f'sqlite:///{BASE_DIR / "app.db"}')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
