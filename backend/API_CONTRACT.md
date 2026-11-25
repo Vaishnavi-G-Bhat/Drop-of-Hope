@@ -23,7 +23,7 @@ The backend currently supports email/password login only; Google OAuth is not im
 - GET `/api/search/blood-banks`
 - GET `/api/search/emergency`
 
-Search accepts optional `blood_group`, `country`, `state`, `district`, `city`, and `pin_code`; donor searches also accept `area` and `compatible=true`. Results contain verified, active listings. Contact fields are only returned for a signed-in session. Emergency search accepts `location_scope=city` to include all matching donors in the city while ranking the request's PIN code and area first. Blood-bank search can be queried once per blood group; the API does not expose a consolidated inventory summary. Search results and stock are reported information and must be confirmed directly.
+Search accepts optional `blood_group`, `city`, and `pin_code`; donor searches also accept `country`, `state`, `district`, `area`, and `compatible=true`, while blood-bank searches accept `area`. Results contain verified, active listings. When a blood group is specified, blood banks without a stock entry for that group are excluded. Results include donor and blood-bank location details, and blood-bank license, opening hours, and reported stock where available. Contact fields are only returned for a signed-in session. Emergency search accepts `location_scope=city` to include matching donors and blood banks throughout the city while ranking the request's PIN code and area first. Search results and stock are reported information and must be confirmed directly.
 
 ## Donor
 
@@ -67,7 +67,7 @@ Blood-bank profile and stock routes require the blood-bank role. The profile upd
 
 Request creation and status changes require the patient role. Creation requires blood group, units (at least one), and a future/current `required_date`, plus a valid city and 6-digit PIN code. Blood-bank request listing is read-only; there is no blood-bank endpoint for changing a request's status.
 
-After a requester confirms an accepted donation, the donor's `last_donation_date` and `total_donations` are updated once. Request details show verified same-city donor matches, with matching area and PIN code ranked first; donor contact details remain masked in search.
+After a requester confirms an accepted donation, the donor's `last_donation_date` and `total_donations` are updated once. Request details show all verified same-city donor and matching blood-bank listings, with nearby locations ranked first; donor contact details remain masked in search.
 
 ## Notifications
 

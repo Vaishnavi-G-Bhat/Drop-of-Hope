@@ -59,8 +59,9 @@ async function loadRequests() {
   }
 }
 
-async function loadNearbyDonors(request, target) {
-  target.replaceChildren(element('p', 'muted', 'Searching verified donors in this city…'));
+async function loadNearbyMatches(request, donorTarget, bankTarget) {
+  donorTarget.replaceChildren(element('p', 'muted', 'Searching verified donors in this city…'));
+  bankTarget.replaceChildren(element('p', 'muted', 'Searching verified blood banks in this city…'));
   try {
     const { data } = await api.search.emergency({
       blood_group: request.blood_group,
@@ -69,9 +70,14 @@ async function loadNearbyDonors(request, target) {
       pin_code: request.pin_code || undefined,
       location_scope: 'city',
     });
-    renderSearchResults({ donors: data.donors?.items || [], banks: [] }, target, null);
+    renderSearchResults(
+      { donors: data.donors?.items || [], banks: data.blood_banks?.items || [] },
+      donorTarget,
+      bankTarget,
+    );
   } catch (error) {
-    target.replaceChildren(element('p', 'notice notice--error', error.message));
+    donorTarget.replaceChildren(element('p', 'notice notice--error', error.message));
+    bankTarget.replaceChildren(element('p', 'notice notice--error', error.message));
     ui.handleError(error);
   }
 }
@@ -146,16 +152,23 @@ async function loadRequestDetail(requestId) {
 
     if (!['Resolved', 'Cancelled'].includes(request.status)) {
       const nearbyDonors = element('section', 'dashboard-section');
-      nearbyDonors.append(element('h4', '', 'Nearby verified donors'));
+      nearbyDonors.append(element('h4', '', 'Nearby matching availability'));
       nearbyDonors.append(element(
         'p',
         'muted',
-        'All verified donors in this city are shown, with matching area and PIN code first. Contact details remain masked.',
+        'Matching verified donors and blood banks in this city are listed, with nearby locations first. Confirm availability directly.',
       ));
+      const donorSection = element('section', 'dashboard-section');
+      donorSection.append(element('h5', '', 'Potential donors'));
       const donorTarget = element('div', 'data-grid');
-      nearbyDonors.append(donorTarget);
+      donorSection.append(donorTarget);
+      const bankSection = element('section', 'dashboard-section');
+      bankSection.append(element('h5', '', 'Blood banks'));
+      const bankTarget = element('div', 'data-grid');
+      bankSection.append(bankTarget);
+      nearbyDonors.append(donorSection, bankSection);
       detailTarget.append(nearbyDonors);
-      await loadNearbyDonors(request, donorTarget);
+      await loadNearbyMatches(request, donorTarget, bankTarget);
     }
   } catch (error) {
     detailTarget.replaceChildren(element('p', 'notice notice--error', error.message));

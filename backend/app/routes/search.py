@@ -85,6 +85,7 @@ def search_donors():
             'district': donor.district,
             'city': donor.city,
             'area': donor.area,
+            'pin_code': donor.pin_code,
             'availability_status': donor.availability_status,
             'freshness': latest,
             'last_updated_at': donor.status_updated_at.isoformat() if donor.status_updated_at else None,
@@ -113,9 +114,11 @@ def search_blood_banks():
     pin_code = request.args.get('pin_code')
     q = BloodBank.query.join(User, User.id == BloodBank.user_id).filter(User.is_verified == True, User.is_active == True)
     if city:
-        q = q.filter(BloodBank.city == city)
+        q = q.filter(func.lower(BloodBank.city) == city.lower())
     if pin_code:
         q = q.filter(BloodBank.pin_code == pin_code)
+    if request.args.get('area'):
+        q = q.filter(func.lower(BloodBank.area) == request.args.get('area').lower())
     items = []
     for bank in q.all():
         stock = BloodStock.query.filter_by(blood_bank_id=bank.id, blood_group=blood_group).first() if blood_group else None
@@ -123,12 +126,16 @@ def search_blood_banks():
             item = {
                 'id': bank.id,
                 'name': bank.name,
+                'license_number': bank.license_number,
                 'address': bank.address,
                 'city': bank.city,
                 'area': bank.area,
+                'pin_code': bank.pin_code,
+                'blood_group': blood_group,
                 'units_reported': stock.units if stock else 0,
                 'last_updated_at': stock.last_updated_at.isoformat() if stock else None,
                 'freshness': 'Current' if stock and stock.last_updated_at else 'Needs confirmation',
+                'open_hours': bank.open_hours,
                 'verified': True,
                 'contact_phone': None,
             }
@@ -176,13 +183,21 @@ def emergency_search():
             'district': donor.district,
             'city': donor.city,
             'area': donor.area,
+            'pin_code': donor.pin_code,
             'availability_status': donor.availability_status,
             'freshness': latest,
             'last_updated_at': donor.status_updated_at.isoformat() if donor.status_updated_at else None,
             'verified': bool(donor.user.is_verified),
             'match_score': match_score,
             'masked_phone': mask_phone(donor.user.phone) if 'user_id' in session else None,
+            'donation_gap_notice': None,
         })
+        if donor.last_donation_date:
+            days_since = (datetime.now(timezone.utc).date() - donor.last_donation_date).days
+            if days_since < 90:
+                donor_items[-1]['donation_gap_notice'] = (
+                    'Donor may be within the usual gap between donations. Final eligibility must be confirmed by the blood bank or doctor.'
+                )
     donor_items.sort(key=lambda item: -item['match_score'])
 
     bank_q = BloodBank.query.join(User, User.id == BloodBank.user_id).filter(User.is_verified == True, User.is_active == True)
@@ -193,18 +208,30 @@ def emergency_search():
     bank_items = []
     for bank in bank_q.all():
         stock = BloodStock.query.filter_by(blood_bank_id=bank.id, blood_group=blood_group).first() if blood_group else None
+        if blood_group and not stock:
+            continue
         bank_items.append({
             'id': bank.id,
             'name': bank.name,
+            'license_number': bank.license_number,
             'address': bank.address,
             'city': bank.city,
             'area': bank.area,
+            'pin_code': bank.pin_code,
+            'blood_group': blood_group,
             'units_reported': stock.units if stock else 0,
             'last_updated_at': stock.last_updated_at.isoformat() if stock else None,
             'freshness': 'Current' if stock and stock.last_updated_at else 'Needs confirmation',
+            'open_hours': bank.open_hours,
             'verified': True,
             'contact_phone': bank.contact_phone if 'user_id' in session else None,
         })
+    bank_items.sort(
+        key=lambda item: (
+            item['pin_code'] != pin_code if pin_code else False,
+            item['area'].lower() != area.lower() if area and item['area'] else bool(area),
+        )
+    )
     return success_response({
         'donors': {'items': donor_items, 'total': len(donor_items)},
         'blood_banks': {'items': bank_items, 'total': len(bank_items)},

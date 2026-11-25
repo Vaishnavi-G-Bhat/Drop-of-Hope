@@ -78,14 +78,18 @@ function buildNavbar() {
   const textControls = element('div', 'text-size-controls');
   textControls.setAttribute('aria-label', t('textSize'));
   for (const [icon, label, delta] of [
-    ['−', t('textSizeDecrease'), -1],
+    ['zoom-out', t('textSizeDecrease'), -1],
     ['↺', t('textSizeReset'), 0],
-    ['+', t('textSizeIncrease'), 1],
+    ['zoom-in', t('textSizeIncrease'), 1],
   ]) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'text-button';
-    button.textContent = icon;
+    if (icon === 'zoom-out' || icon === 'zoom-in') {
+      button.append(createZoomIcon(icon === 'zoom-in'));
+    } else {
+      button.textContent = icon;
+    }
     button.title = label;
     button.setAttribute('aria-label', `${t('textSize')}: ${label}`);
     button.addEventListener('click', () => adjustTextSize(delta));
@@ -96,6 +100,30 @@ function buildNavbar() {
   nav.append(brand, links, controls);
   header.append(nav);
   return header;
+}
+
+function createZoomIcon(zoomIn) {
+  const namespace = 'http://www.w3.org/2000/svg';
+  const icon = document.createElementNS(namespace, 'svg');
+  icon.setAttribute('viewBox', '0 0 24 24');
+  icon.setAttribute('aria-hidden', 'true');
+  icon.setAttribute('focusable', 'false');
+  const lens = document.createElementNS(namespace, 'circle');
+  lens.setAttribute('cx', '10');
+  lens.setAttribute('cy', '10');
+  lens.setAttribute('r', '6.5');
+  const handle = document.createElementNS(namespace, 'path');
+  handle.setAttribute('d', 'm15 15 5 5');
+  const mark = document.createElementNS(namespace, 'path');
+  mark.setAttribute('d', zoomIn ? 'M7.5 10h5M10 7.5v5' : 'M7.5 10h5');
+  for (const shape of [lens, handle, mark]) {
+    shape.setAttribute('fill', 'none');
+    shape.setAttribute('stroke', 'currentColor');
+    shape.setAttribute('stroke-width', '1.8');
+    shape.setAttribute('stroke-linecap', 'round');
+  }
+  icon.append(lens, handle, mark);
+  return icon;
 }
 
 function adjustTextSize(delta) {

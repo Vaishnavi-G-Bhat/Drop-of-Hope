@@ -194,6 +194,70 @@ def test_public_search_with_verified_donor_and_blood_bank(client):
     assert emergency_search.get_json()['data']['blood_banks']['total'] == 1
 
 
+def test_emergency_search_returns_all_matching_listings_and_details(client):
+    from app.models import BloodStock, User
+
+    for index in range(2):
+        client.post('/api/auth/register/donor', json={
+            'email': f'multi-donor-{index}@example.com',
+            'password': 'Password1!',
+            'full_name': f'Matching Donor {index}',
+            'phone': f'987654321{index}',
+            'age': 26,
+            'blood_group': 'O+',
+            'country': 'India',
+            'state': 'Karnataka',
+            'district': 'Bengaluru Urban',
+            'city': 'Bengaluru',
+            'area': 'MG Road',
+            'pin_code': '560001',
+        })
+        donor_user = User.query.filter_by(email=f'multi-donor-{index}@example.com').one()
+        donor_user.is_verified = True
+
+    for index in range(3):
+        client.post('/api/auth/register/blood-bank', json={
+            'email': f'multi-bank-{index}@example.com',
+            'password': 'Password1!',
+            'full_name': f'Bank Contact {index}',
+            'phone': f'987654322{index}',
+            'name': f'Matching Blood Bank {index}',
+            'license_number': f'LIC-{index}',
+            'address': f'{index} MG Road',
+            'city': 'Bengaluru',
+            'area': 'MG Road',
+            'pin_code': '560001',
+            'contact_phone': f'987654322{index}',
+            'open_hours': '9am-9pm',
+        })
+        bank_user = User.query.filter_by(email=f'multi-bank-{index}@example.com').one()
+        bank_user.is_verified = True
+        if index < 2:
+            db.session.add(BloodStock(
+                blood_bank_id=bank_user.blood_bank.id,
+                blood_group='O+',
+                units=4 + index,
+            ))
+    db.session.commit()
+
+    response = client.get(
+        '/api/search/emergency?blood_group=O%2B&city=Bengaluru'
+        '&area=MG%20Road&pin_code=560001&location_scope=city'
+    )
+    data = response.get_json()['data']
+
+    assert response.status_code == 200
+    assert data['donors']['total'] == 2
+    assert all(item['pin_code'] == '560001' for item in data['donors']['items'])
+    assert data['blood_banks']['total'] == 2
+    first_bank = data['blood_banks']['items'][0]
+    assert first_bank['blood_group'] == 'O+'
+    assert first_bank['units_reported'] in (4, 5)
+    assert first_bank['license_number'].startswith('LIC-')
+    assert first_bank['open_hours'] == '9am-9pm'
+    assert first_bank['pin_code'] == '560001'
+
+
 def test_city_scoped_emergency_search_ranks_matching_area_first(client):
     from app.models import User
 

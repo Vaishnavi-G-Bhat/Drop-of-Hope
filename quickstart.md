@@ -6,7 +6,7 @@ The Flask app serves both the frontend and API on port `5500`. Run only the Flas
 
 ### Windows (PowerShell)
 
-Use Python 3.13 for the backend environment.
+Use Python 3.13 for the backend environment. Flask serves both the frontend and API on port `5500`; do not start a separate `http.server`.
 
 ```powershell
 cd "D:\projects\Drop Of Hope\backend"
@@ -29,11 +29,9 @@ flask --app run init-db
 python seed.py
 python run.py
 ```
-py -m http.server 5500 --bind 127.0.0.1 --directory "D:\projects\Drop Of Hope\frontend"
 Open `http://127.0.0.1:5500/`. The same server handles API requests under `/api`, so the frontend and backend share one port and session-cookie origin.
 
 If port `5500` is already in use, stop the existing Flask server before starting this one.
-py -m http.server 5500 --bind 127.0.0.1 --directory "D:\projects\Drop Of Hope\frontend"
 ## Demo login
 
 Admin account created by the seed script:

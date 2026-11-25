@@ -35,10 +35,14 @@ export function renderSearchResults({ donors, banks }, donorTarget, bankTarget) 
   for (const donor of donors || []) {
     const card = element('article', 'data-card');
     card.append(element('h3', '', donor.display_name || 'Registered donor'));
-    const location = [donor.city, donor.district, donor.state, donor.country, donor.area].filter(Boolean).join(', ');
-    card.append(element('p', '', `${donor.blood_group} · ${location}`));
+    card.append(element('p', '', `Blood group: ${donor.blood_group}`));
+    const location = [donor.area, donor.city, donor.district, donor.state, donor.country].filter(Boolean).join(', ');
+    card.append(element('p', '', `Location: ${location}${donor.pin_code ? ` · PIN ${donor.pin_code}` : ''}`));
     card.append(ui.statusBadge(donor.availability_status));
     card.append(ui.statusBadge(donor.freshness || 'Needs confirmation', donor.freshness === 'Current' ? 'success' : 'warning'));
+    if (donor.last_updated_at) {
+      card.append(element('p', 'muted', `Availability updated: ${new Date(donor.last_updated_at).toLocaleString()}`));
+    }
     if (donor.masked_phone) {
       card.append(element('p', '', `Contact: ${donor.masked_phone}`));
     } else {
@@ -53,9 +57,19 @@ export function renderSearchResults({ donors, banks }, donorTarget, bankTarget) 
   for (const bank of banks || []) {
     const card = element('article', 'data-card');
     card.append(element('h3', '', bank.name));
-    card.append(element('p', '', [bank.address, bank.area, bank.city].filter(Boolean).join(', ')));
-    if (bank.units_reported !== undefined) {
-      card.append(element('p', '', `${bank.units_reported} reported units for the selected group`));
+    const location = [bank.address, bank.area, bank.city].filter(Boolean).join(', ');
+    card.append(element('p', '', `Location: ${location}${bank.pin_code ? ` · PIN ${bank.pin_code}` : ''}`));
+    if (bank.blood_group && bank.units_reported !== undefined) {
+      card.append(element('p', '', `${bank.blood_group}: ${bank.units_reported} reported units`));
+    }
+    if (bank.license_number) {
+      card.append(element('p', '', `License: ${bank.license_number}`));
+    }
+    if (bank.open_hours) {
+      card.append(element('p', '', `Opening hours: ${bank.open_hours}`));
+    }
+    if (bank.last_updated_at) {
+      card.append(element('p', 'muted', `Stock updated: ${new Date(bank.last_updated_at).toLocaleString()}`));
     }
     card.append(ui.statusBadge(bank.verified ? 'Verified' : 'Unverified', bank.verified ? 'success' : 'warning'));
     card.append(ui.statusBadge(bank.freshness || 'Needs confirmation', bank.freshness === 'Current' ? 'success' : 'warning'));

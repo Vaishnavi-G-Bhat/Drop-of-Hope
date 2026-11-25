@@ -53,6 +53,12 @@
   gap: 0.25rem;
 }
 
+.text-size-controls svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
 .site-nav__links {
   flex-wrap: wrap;
   justify-content: center;
